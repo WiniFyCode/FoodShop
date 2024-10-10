@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tối đa 5 item -->
+    <item
+        android:id="@+id/shop"
+        android:icon="@drawable/shop"
+        android:title="Shop" />
+    <item
+        android:id="@+id/explore"
+        android:icon="@drawable/search"
+        android:title="Explore" />
+    <item
+        android:id="@+id/cart"
+        android:icon="@drawable/cart"
+        android:title="Cart" />
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/tym"
+        android:title="Favorite" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/profile"
+        android:title="Profile" />
+
+</menu>

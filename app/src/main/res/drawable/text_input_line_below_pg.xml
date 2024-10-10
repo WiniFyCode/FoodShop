@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Nền trong suốt -->
+    <item android:left="0dp" android:right="0dp" android:top="0dp" android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <!-- Đường line ở dưới -->
+    <item android:top="40dp">
+        <shape android:shape="line">
+            <stroke
+                android:width="1dp"
+                android:color="@color/DarkGray" />
+        </shape>
+    </item>
+</layer-list>
