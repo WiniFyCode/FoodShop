@@ -49,6 +49,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
         favoriteFragment = new FavoriteFragment();
         profileFragment = new ProfileFragment();
 
+        LoadFragment(shopFragment);
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

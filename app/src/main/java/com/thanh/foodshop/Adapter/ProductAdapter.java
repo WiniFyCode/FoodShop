@@ -1,6 +1,7 @@
 package com.thanh.foodshop.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.thanh.foodshop.Activity.ProductDetailActivity;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -35,12 +37,37 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+
         Product product = productsData.get(position);
+
         holder.tvNameFruit.setText(product.tenfood);
-        holder.tvQuantity.setText(product.soluongban);
-        holder.tvPrice.setText(product.dongia);
+        holder.tvQuantity.setText(String.valueOf(product.soluongban)); // Chuyển đổi soluongban thành chuỗi
+        holder.tvPrice.setText(String.valueOf(product.dongia)); // Chuyển đổi dongia thành chuỗi
         // load anh server bang picasso
         Picasso.get().load(SERVER.food_url + product.hinhminhhoa).into(holder.imgProduct);
+
+        // Chi tiết sản phẩm
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // khởi tạo intent để gọi màn ProductDetailActivity
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                // truyền dữ liệu qua
+                intent.putExtra("tenfood", product.tenfood);
+                intent.putExtra("soluongban", product.soluongban);
+                intent.putExtra("dongia", product.dongia);
+                intent.putExtra("mota", product.mota);
+                intent.putExtra("hinhminhhoa", product.hinhminhhoa);
+                intent.putExtra("ngaythemvao", product.ngaythemvao);
+                intent.putExtra("ngayhethan", product.ngayhethan);
+                intent.putExtra("idfood", product.idfood);
+                //TODO: Mai mốt làm thêm description, reviews, nutritions
+
+                // chuyển trang
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -58,7 +85,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
         // anh xa
         imgProduct = itemView.findViewById(R.id.imgProduct);
         tvNameFruit = itemView.findViewById(R.id.tvNameFruit);
-        tvQuantity = itemView.findViewById(R.id.tvQuantity);
+        tvQuantity = itemView.findViewById(R.id.tvWeight);
         tvPrice = itemView.findViewById(R.id.tvPrice);
     }
 }

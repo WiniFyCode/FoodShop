@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ShopFragment extends Fragment {
@@ -37,22 +38,34 @@ public class ShopFragment extends Fragment {
     ViewFlipper viewFlipper;
     RecyclerView rcvExclusiveOffer, rcvBestSelling;
 
-    // Product
-    ProductAdapter productsAdapter;
-    ArrayList<Product> productsData;
+    // Product exclusive
+    ProductAdapter exclusiveAdapter;
+    ArrayList<Product> exclusiveData;
+    // Product best selling
+    ProductAdapter bestSellingAdapter;
+    ArrayList<Product> bestSellingData;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.shop_fragment, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // khoi tao view va recyclerView
-        // banner
+        // khởi tạo List product rỗng
+        exclusiveData = new ArrayList<>();
+        bestSellingData = new ArrayList<>();
+
+        // Khởi tạo productsData ở đây
+        exclusiveAdapter = new ProductAdapter(exclusiveData, getContext());
+        bestSellingAdapter = new ProductAdapter(bestSellingData, getContext());
+
+        // Khởi tạo các view
         viewFlipper = view.findViewById(R.id.viewFlipper);
 
         // Exclusive Offer
@@ -61,20 +74,20 @@ public class ShopFragment extends Fragment {
         // Best Selling
         rcvBestSelling = view.findViewById(R.id.rcvBestSelling);
 
-        // khoi tao adapter va layout cho recyclerView
-        productsData = new ArrayList<>();
-        productsAdapter = new ProductAdapter(productsData, getContext());
-
-        // set adapter cho recyclerView
+        // Thiết lập RecyclerView
         rcvExclusiveOffer.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        rcvExclusiveOffer.setAdapter(productsAdapter);
-        rcvBestSelling.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        rcvBestSelling.setAdapter(productsAdapter);
+        rcvExclusiveOffer.setAdapter(exclusiveAdapter);
 
-        // goi ham load du lieu
+        rcvBestSelling.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        rcvBestSelling.setAdapter(bestSellingAdapter);
+
+
+        // Gọi loadData() ở đây
         loadSilder();
-        if (productsData.size() == 0) {
+        if (exclusiveData.isEmpty()) {
             loadExclusive();
+        }
+        if (bestSellingData.isEmpty()) {
             loadBestSelling();
         }
     }
@@ -83,37 +96,18 @@ public class ShopFragment extends Fragment {
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // Kiểm tra xem response có phải là chuỗi rỗng hay không
-                if (response != null && !response.isEmpty()) {
-                    // Tách các tên file ảnh từ String response
-                    String[] imageNames = response.split("-");
+                String[] mangFile = response.split("-"); // Phân tách các file từ chuỗi response
 
-                    // Xử lý từng tên file ảnh
-                    for (String imageName : imageNames) {
-                        // Kiểm tra xem tên file ảnh có phải là chuỗi rỗng hay không
-                        if (imageName != null && !imageName.isEmpty()) {
-                            // Tạo ImageView và load ảnh bằng Picasso
-                            ImageView imageView = new ImageView(getContext());
-                            Picasso.get().load(SERVER.anhslide_url + imageName).into(imageView);
-
-                            // Thêm ImageView vào ViewFlipper
-                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                            viewFlipper.addView(imageView);
-                        }
-                    }
-
-                    // Thiết lập ViewFlipper
-                    viewFlipper.setFlipInterval(3000);
-                    viewFlipper.setAutoStart(true);
-                } else {
-                    // Xử lý trường hợp response rỗng
-                    Log.e("View Flipper - S", "Server response is empty");
-                    Log.e("View Flipper - E", "Error: " + response);
-                    Toast.makeText(getContext(), "Không thể tải slide", Toast.LENGTH_SHORT).show();
+                for (String filename : mangFile) {
+                    ImageView imageView = new ImageView(getContext());
+                    Picasso.get().load(SERVER.anhslide_url + filename).into(imageView);
+                    // Căn chỉnh chiều rộng và chiều cao của slide
+                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    viewFlipper.addView(imageView);
                 }
             }
         };
-        Response.ErrorListener thatbai= new Response.ErrorListener() {
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getContext(), "thất bại" + error, Toast.LENGTH_SHORT).show();
@@ -127,37 +121,43 @@ public class ShopFragment extends Fragment {
         // Tạo requestQueue và thêm request vào hàng đợi
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
+
+        viewFlipper.setFlipInterval(2500);
+        viewFlipper.setAutoStart(true);
     }
 
     private void loadExclusive() {
         // B3:
-        productsData.clear();
+        exclusiveData.clear();
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
-                    for (int i=0;i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
-                        productsData.add(new Product(
-                                food.getInt("soluongban"),
+                        String mota = new String(food.getString("mota").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String tenfood = new String(food.getString("tenfood").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        exclusiveData.add(new Product(
+                                food.getString("soluongban"),
                                 food.getString("ngayhethan"),
                                 food.getString("ngaythemvao"),
                                 food.getString("hinhminhhoa"),
-                                food.getString("mota"),
-                                food.getInt("dongia"),
-                                food.getString("tenfood"),
+                                mota,
+                                food.getString("dongia"),
+                                tenfood,
                                 food.getInt("idfood")
                         ));
                     }
 
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "LOI"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "LOI" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);
                 }
-
-            }};
-        Response.ErrorListener thatbai= new Response.ErrorListener() {
+                exclusiveAdapter.notifyDataSetChanged();
+            }
+        };
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getContext(), "thất bại" + error, Toast.LENGTH_SHORT).show();
@@ -165,50 +165,51 @@ public class ShopFragment extends Fragment {
         };
 
         // B1: Tạo request trong Volley
-        //kiêểu Json mảng array dùng nếu dùng để lấy nhiều đối tượng
         StringRequest stringRequest = new StringRequest(SERVER.laytenfood_php, thanhcong, thatbai);
         // B2: Dùng request với Volley
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
 
-    private void loadBestSelling(){
+    private void loadBestSelling() {
         // B3:
-        productsData.clear();
+        bestSellingData.clear();
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
-                    for (int i=0;i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
-                        productsData.add(new Product(
-                                food.getInt("soluongban"),
+                        String mota = new String(food.getString("mota").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String tenfood = new String(food.getString("tenfood").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        bestSellingData.add(new Product(
+                                food.getString("soluongban"),
                                 food.getString("ngayhethan"),
                                 food.getString("ngaythemvao"),
                                 food.getString("hinhminhhoa"),
-                                food.getString("mota"),
-                                food.getInt("dongia"),
-                                food.getString("tenfood"),
+                                mota,
+                                food.getString("dongia"),
+                                tenfood,
                                 food.getInt("idfood")
                         ));
                     }
-
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "LOI"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "LOI" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);
                 }
 
-            }};
-        Response.ErrorListener thatbai= new Response.ErrorListener() {
+                bestSellingAdapter.notifyDataSetChanged();
+            }
+        };
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "thất bị" + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "thất bại" + error, Toast.LENGTH_SHORT).show();
             }
         };
 
         // B1: Tạo request trong Volley
-        //kiểu Json mảng array dùng nhiều đối tượng
         StringRequest stringRequest = new StringRequest(SERVER.bestfood_php, thanhcong, thatbai);
         // B2: Dung request với Volley
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());

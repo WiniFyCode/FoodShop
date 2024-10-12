@@ -6,14 +6,14 @@ public class Product implements Serializable {
 
     public int idfood;
     public String tenfood;
-    public int dongia;
+    public String dongia;
     public String mota;
     public String hinhminhhoa;
     public String ngaythemvao;
     public String ngayhethan;
-    public int soluongban;
+    public String soluongban;
 
-    public Product(int soluongban, String ngayhethan, String ngaythemvao, String hinhminhhoa, String mota, int dongia, String tenfood, int idfood) {
+    public Product(String soluongban, String ngayhethan, String ngaythemvao, String hinhminhhoa, String mota, String dongia, String tenfood, int idfood) {
         this.soluongban = soluongban;
         this.ngayhethan = ngayhethan;
         this.ngaythemvao = ngaythemvao;

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp"
+    tools:context=".Activity.ProductDetailActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnBack"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/back"
+        android:backgroundTint="@color/Primary_yellow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="330dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/banana"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/tym"
+        android:backgroundTint="@color/DarkGray"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNameProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="45dp"
+        android:text="Banana"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgProduct" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvNameProduct"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameProduct">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ĐL: "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100g"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50,000"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text=" VNĐ"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnMinus"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/minus_round_icon_48" />
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/tv_quantity"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="25sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPlus"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/plus_round_icon_48"
+            android:backgroundTint="@color/Primary_green" />
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="7dp"
+        android:background="@color/DarkGray"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider">
+
+        <TextView
+            android:id="@+id/textViewProductDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Description"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnMoreDes"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="170dp"
+            android:background="@drawable/arrow_bottom_down" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bananas are nutritious. Bananas may be good for weight loss. Bananas may be good for your heart. As part of a healthful and varied diet."
+        android:textAlignment="inherit"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider2"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="7dp"
+        android:background="@color/DarkGray"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:orientation="horizontal"
+        android:weightSum="7"
+        app:layout_constraintStart_toStartOf="@+id/tvDescription"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="Nutritions"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvNutritions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:text="100calor / 100g" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnMoreNut"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="0"
+            android:background="@drawable/arrow_forward" />
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider3"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="7dp"
+        android:background="@color/DarkGray"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        app:layout_constraintStart_toStartOf="@+id/tvDescription"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.5"
+            android:text="Reviews"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/ratingBar"
+            android:rating="4"
+            android:stepSize="0.5"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:layout_marginTop="3dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnMoreReview"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="0"
+            android:background="@drawable/arrow_forward" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnAddToCart"
+        android:layout_width="match_parent"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_height="67dp"
+        android:text="Add To Cart"
+        android:background="@drawable/add_to_cart_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
