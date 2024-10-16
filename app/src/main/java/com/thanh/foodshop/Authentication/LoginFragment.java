@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,24 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.thanh.foodshop.Activity.BottomNavigationActivity;
+import com.thanh.foodshop.MenuFragment.ShopFragment;
+import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
+import com.thanh.foodshop.SERVER;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginFragment extends Fragment {
 
@@ -30,10 +46,10 @@ public class LoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        // khai bao
-        sharedPreferences = requireActivity().getSharedPreferences("FileAuth", Context.MODE_PRIVATE);
+        // Khởi tạo SharedPreferences để lưu thông tin đăng nhập
+        sharedPreferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
 
-        // anh xa
+        // Ánh xạ các thành phần giao diện
         ipedtUsername = view.findViewById(R.id.ipedtUsername);
         ipedtPassword = view.findViewById(R.id.ipedtPassword);
         cbRememberMe = view.findViewById(R.id.cbRememberMe);
@@ -41,55 +57,103 @@ public class LoginFragment extends Fragment {
         btnLoginGoogle = view.findViewById(R.id.btnLoginGoogle);
         btnLoginFacebook = view.findViewById(R.id.btnLoginFacebook);
 
-        // Nap thong tin lan dau dang nhap
-        if (sharedPreferences.getBoolean("remember", false)) {
-            ipedtUsername.setText(sharedPreferences.getString("username", ""));
-            ipedtPassword.setText(sharedPreferences.getString("password", ""));
-            cbRememberMe.setChecked(true);
+        // Kiểm tra xem có thông tin đăng nhập đã lưu không để tự động đăng nhập
+        if (sharedPreferences.getBoolean("remember_me", false)) {
+            String username = sharedPreferences.getString("username", "");
+            String password = sharedPreferences.getString("password", "");
+
+            if (!username.isEmpty() && !password.isEmpty()) {
+                // Đăng nhập tự động
+                Intent intent = new Intent(requireActivity(), BottomNavigationActivity.class);
+                requireActivity().startActivity(intent);
+                requireActivity().finish();
+            }
         }
 
-        // onClick xu li login
+        // Xử lý khi người dùng nhấn vào nút đăng nhập
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("LoginFragment", "Đã nhấn nút đăng nhập");  // Thêm log này
                 login();
             }
         });
+
         return view;
     }
 
-    // ham xu li login
+    // Hàm xử lý đăng nhập
     void login() {
-        String username = ipedtUsername.getText().toString();
-        String password = ipedtPassword.getText().toString();
+        String username = ipedtUsername.getText().toString().trim();
+        String password = ipedtPassword.getText().toString().trim();
 
-        String usernameSaved = sharedPreferences.getString("username", "");
-        String passwordSaved = sharedPreferences.getString("password", "");
+        // Phản hồi khi yêu cầu đăng nhập thành công
+        Response.Listener<String> thanhcong = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (!response.isEmpty() && !response.equals("fail")) {
+                    try {
+                        // Chuyển đổi chuỗi JSON nhận được thành đối tượng người dùng
+                        JSONObject user = new JSONObject(response);
+                        ShopFragment.users = new User(
+                                user.getInt("id"),
+                                user.getString("username"),
+                                user.getString("password"),
+                                user.getString("email"),
+                                user.getString("address"),
+                                user.getString("phone_number"),
+                                user.getString("role")
+                        );
 
-        // xu li logic
-        if (username.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-        } else if (!username.equals(usernameSaved)) {
-            Toast.makeText(getContext(), "Sai tên đăng nhập", Toast.LENGTH_SHORT).show();
-        } else if (!password.equals(passwordSaved)) {
-            Toast.makeText(getContext(), "Sai mật khẩu", Toast.LENGTH_SHORT).show();
-        } else {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (cbRememberMe.isChecked()) {
-                editor.putString("username", ipedtUsername.getText().toString());
-                editor.putString("password", ipedtPassword.getText().toString());
-                editor.putBoolean("remember", true);
-                editor.apply();
-            } else {
-                editor.clear();
-                editor.apply();
+                        // Nếu người dùng chọn nhớ đăng nhập, lưu thông tin vào SharedPreferences
+                        if (cbRememberMe.isChecked()) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("remember_me", true);
+                            editor.putString("username", username);
+                            editor.putString("password", password);
+                            editor.apply();
+                        }
+
+                        // Chuyển sang giao diện chính sau khi đăng nhập thành công
+
+                        Intent intent = new Intent(requireActivity(), BottomNavigationActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    Toast.makeText(requireActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireActivity(), "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+                }
             }
+        };
 
-            // cho nay chuyen qua man hinh chinh - hien chu co
-//            TODO: chuyen qua man hinh chinh
-            Intent intent = new Intent(getContext(), BottomNavigationActivity.class);
-            startActivity(intent);
-            Toast.makeText(getContext(), "Login thành công", Toast.LENGTH_SHORT).show();
-        }
+        // Phản hồi khi yêu cầu đăng nhập thất bại
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("*LOGIN*", error.toString());
+                Toast.makeText(requireActivity(), "Không thể kết nối với máy chủ", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // Tạo yêu cầu đăng nhập tới server
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.login_php, thanhcong, thatbai) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Gửi dữ liệu đăng nhập (username và password) lên server
+                HashMap<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        // Thêm yêu cầu vào hàng đợi
+        RequestQueue requestQueue = Volley.newRequestQueue(requireActivity());
+        requestQueue.add(stringRequest);
     }
 }

@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ĐL: "
+            android:text="K.Lượng: "
             android:textSize="16sp" />
 
         <TextView
@@ -111,15 +111,15 @@
 
         <TextView
             android:id="@+id/tvQuantity"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginStart="7dp"
             android:layout_marginEnd="7dp"
             android:background="@drawable/tv_quantity"
             android:gravity="center"
             android:text="1"
-            android:textSize="25sp" />
+            android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnPlus"
@@ -154,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Product Description"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/linearLayout2"
             app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
@@ -172,11 +172,13 @@
 
     <TextView
         android:id="@+id/tvDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_height="wrap_content"
         android:text="Bananas are nutritious. Bananas may be good for weight loss. Bananas may be good for your heart. As part of a healthful and varied diet."
         android:textAlignment="inherit"
-        android:textSize="15sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/linearLayout3"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
@@ -207,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:text="Nutritions"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -215,6 +217,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
+            android:textSize="16sp"
             android:text="100calor / 100g" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -250,7 +253,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3.5"
             android:text="Reviews"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatRatingBar

@@ -31,7 +31,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_card_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_card_shop, parent, false);
         return new ProductViewHolder(view);
     }
 
@@ -40,11 +40,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
         Product product = productsData.get(position);
 
-        holder.tvNameFruit.setText(product.tenfood);
-        holder.tvQuantity.setText(String.valueOf(product.soluongban)); // Chuyển đổi soluongban thành chuỗi
-        holder.tvPrice.setText(String.valueOf(product.dongia)); // Chuyển đổi dongia thành chuỗi
+        holder.tvNameFruit.setText(product.name);
+        holder.tvQuantity.setText(product.weight);
+        holder.tvPrice.setText(product.price);
+
         // load anh server bang picasso
-        Picasso.get().load(SERVER.food_url + product.hinhminhhoa).into(holder.imgProduct);
+        Picasso.get().load(SERVER.food_url + product.image_url).into(holder.imgProduct);
 
         // Chi tiết sản phẩm
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -53,19 +54,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 // khởi tạo intent để gọi màn ProductDetailActivity
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 // truyền dữ liệu qua
-                intent.putExtra("tenfood", product.tenfood);
-                intent.putExtra("soluongban", product.soluongban);
-                intent.putExtra("dongia", product.dongia);
-                intent.putExtra("mota", product.mota);
-                intent.putExtra("hinhminhhoa", product.hinhminhhoa);
-                intent.putExtra("ngaythemvao", product.ngaythemvao);
-                intent.putExtra("ngayhethan", product.ngayhethan);
-                intent.putExtra("idfood", product.idfood);
-                //TODO: Mai mốt làm thêm description, reviews, nutritions
+                intent.putExtra("name", product.name);
+//                intent.putExtra("stock_quantity", product.stock_quantity);
+                intent.putExtra("price", product.price);
+//                intent.putExtra("category_id", product.category_id);
+                intent.putExtra("description", product.description);
+                intent.putExtra("image_uri", product.image_url);
+//                intent.putExtra("last_updated", product.last_updated);
+//                intent.putExtra("expiry_date", product.expiry_date);
+                intent.putExtra("id", product.id);
+                intent.putExtra("weight", product.weight);
+
+                //TODO: Mai mốt làm thêm reviews, nutritions
 
                 // chuyển trang
                 context.startActivity(intent);
-
             }
         });
     }

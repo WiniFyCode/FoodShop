@@ -9,9 +9,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatRatingBar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.R;
@@ -51,10 +48,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnAddToCart = findViewById(R.id.btnAddToCart);
 
         // Lấy dữ liệu từ intent
-        String name = intent.getStringExtra("tenfood");
-        String price = intent.getStringExtra("dongia");
-        String image = intent.getStringExtra("hinhminhhoa");
-        String description = intent.getStringExtra("mota");
+        String name = intent.getStringExtra("name");
+        String description = intent.getStringExtra("description");
+        String price = intent.getStringExtra("price");
+        String weight = intent.getStringExtra("weight");
+        String image = intent.getStringExtra("image_url");
+        String stock_quantity = intent.getStringExtra("stock_quantity");
 
         // Xóa background mặc định
         imgProduct.setBackground(null);
@@ -63,6 +62,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvNameProduct.setText(name);
         tvPrice.setText(price);
         tvDescription.setText(description);
+        tvWeight.setText(weight);
+        tvQuantity.setText(stock_quantity);
 
         // Sử dụng Picasso để load hình ảnh từ url
         Picasso.get().load(SERVER.food_url + image).into(imgProduct);

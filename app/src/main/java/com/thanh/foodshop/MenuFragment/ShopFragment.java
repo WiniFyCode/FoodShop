@@ -1,11 +1,11 @@
 package com.thanh.foodshop.MenuFragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.thanh.foodshop.Adapter.ProductAdapter;
 import com.thanh.foodshop.Model.Product;
+import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.SERVER;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 
 public class ShopFragment extends Fragment {
 
+    public static User users;
+
     ViewFlipper viewFlipper;
     RecyclerView rcvExclusiveOffer, rcvBestSelling;
 
@@ -45,12 +48,13 @@ public class ShopFragment extends Fragment {
     ProductAdapter bestSellingAdapter;
     ArrayList<Product> bestSellingData;
 
+    // Ten user
+    TextView tvNameUser;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.shop_fragment, container, false);
-
     }
 
     @Override
@@ -81,6 +85,13 @@ public class ShopFragment extends Fragment {
         rcvBestSelling.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         rcvBestSelling.setAdapter(bestSellingAdapter);
 
+        // Lay ten user
+        tvNameUser = view.findViewById(R.id.tvUsername);
+        if (users != null) {
+            tvNameUser.setText("Hello, " + users.username);
+        } else {
+            tvNameUser.setText("Hello");
+        }
 
         // Gọi loadData() ở đây
         loadSilder();
@@ -136,17 +147,19 @@ public class ShopFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
-                        String mota = new String(food.getString("mota").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                        String tenfood = new String(food.getString("tenfood").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String name = new String(food.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String description = new String(food.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         exclusiveData.add(new Product(
-                                food.getString("soluongban"),
-                                food.getString("ngayhethan"),
-                                food.getString("ngaythemvao"),
-                                food.getString("hinhminhhoa"),
-                                mota,
-                                food.getString("dongia"),
-                                tenfood,
-                                food.getInt("idfood")
+                                food.getInt("id"),
+                                name,
+                                description,
+                                food.getString("price"),
+                                food.getString("weight"),
+//                                food.getInt("category_id"),
+                                food.getString("image_url")
+//                                food.getString("stock_quantity"),
+//                                food.getString("last_updated"),
+//                                food.getString("expiry_date")
                         ));
                     }
 
@@ -165,7 +178,7 @@ public class ShopFragment extends Fragment {
         };
 
         // B1: Tạo request trong Volley
-        StringRequest stringRequest = new StringRequest(SERVER.laytenfood_php, thanhcong, thatbai);
+        StringRequest stringRequest = new StringRequest(SERVER.exclusive_offer_php, thanhcong, thatbai);
         // B2: Dùng request với Volley
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
@@ -181,17 +194,19 @@ public class ShopFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
-                        String mota = new String(food.getString("mota").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                        String tenfood = new String(food.getString("tenfood").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String name = new String(food.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String description = new String(food.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         bestSellingData.add(new Product(
-                                food.getString("soluongban"),
-                                food.getString("ngayhethan"),
-                                food.getString("ngaythemvao"),
-                                food.getString("hinhminhhoa"),
-                                mota,
-                                food.getString("dongia"),
-                                tenfood,
-                                food.getInt("idfood")
+                                food.getInt("id"),
+                                name,
+                                description,
+                                food.getString("price"),
+                                food.getString("weight"),
+//                                food.getInt("category_id"),
+                                food.getString("image_url")
+//                                food.getString("stock_quantity"),
+//                                food.getString("last_updated"),
+//                                food.getString("expiry_date")
                         ));
                     }
                 } catch (JSONException e) {
@@ -205,7 +220,7 @@ public class ShopFragment extends Fragment {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "thất bại" + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "thất bại" + error, Toast.LENGTH_SHORT).show();
             }
         };
 
