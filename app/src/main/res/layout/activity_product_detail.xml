@@ -43,6 +43,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="45dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:maxWidth="350dp"
+        android:layout_marginEnd="10dp"
         android:text="Banana"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -82,17 +86,11 @@
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Primary_green"
             android:text="50,000"
             android:textSize="23sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text=" VNĐ"
-            android:textSize="23sp"
-            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout

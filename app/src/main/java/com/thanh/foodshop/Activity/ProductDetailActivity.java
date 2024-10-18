@@ -2,6 +2,8 @@ package com.thanh.foodshop.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatRatingBar;
 
 import com.squareup.picasso.Picasso;
+import com.thanh.foodshop.MenuFragment.CartFragment;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
@@ -65,8 +68,20 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvWeight.setText(weight);
         tvQuantity.setText(stock_quantity);
 
-        // Sử dụng Picasso để load hình ảnh từ url
-        Picasso.get().load(SERVER.food_url + image).into(imgProduct);
+        // Sử dụng Picasso để load hình ảnh từ url
+        if (image != null && !image.isEmpty()) {
+            Picasso.get().load(image).into(imgProduct);
+        } else {
+            imgProduct.setImageResource(R.drawable.eye_icon);
+        }
+
+        // back lai
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
     }

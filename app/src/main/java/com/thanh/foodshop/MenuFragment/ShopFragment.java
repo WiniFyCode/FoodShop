@@ -1,6 +1,7 @@
 package com.thanh.foodshop.MenuFragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,13 +148,17 @@ public class ShopFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
+
+                        // Convert bytes to string
                         String name = new String(food.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String description = new String(food.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String price = new String(food.getString("price").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
                         exclusiveData.add(new Product(
                                 food.getInt("id"),
                                 name,
                                 description,
-                                food.getString("price"),
+                                price,
                                 food.getString("weight"),
 //                                food.getInt("category_id"),
                                 food.getString("image_url")
@@ -162,12 +167,11 @@ public class ShopFragment extends Fragment {
 //                                food.getString("expiry_date")
                         ));
                     }
-
+                    exclusiveAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "LOI" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);
                 }
-                exclusiveAdapter.notifyDataSetChanged();
             }
         };
         Response.ErrorListener thatbai = new Response.ErrorListener() {
@@ -209,12 +213,11 @@ public class ShopFragment extends Fragment {
 //                                food.getString("expiry_date")
                         ));
                     }
+                    bestSellingAdapter.notifyDataSetChanged(); // dat o day de dung
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "LOI" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);
                 }
-
-                bestSellingAdapter.notifyDataSetChanged();
             }
         };
         Response.ErrorListener thatbai = new Response.ErrorListener() {

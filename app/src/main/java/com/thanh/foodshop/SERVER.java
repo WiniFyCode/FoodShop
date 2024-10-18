@@ -13,4 +13,8 @@ public class SERVER {
 
     public static String login_php = ip + "login.php";
     public static String register_php = ip + "register.php";
+
+    public static String product_categories_php = ip + "product_categories.php";
+    public static String category_php = ip + "category.php";
+
 }

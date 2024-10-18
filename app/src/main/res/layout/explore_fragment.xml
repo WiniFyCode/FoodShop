@@ -3,27 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="15dp"
+    android:orientation="vertical"
     tools:context=".MenuFragment.ExploreFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center|top"
-        android:textSize="22sp"
-        android:textStyle="bold"
         android:layout_marginTop="20dp"
-        android:text="Find Products" />
+        android:gravity="center|top"
+        android:text="Find Products"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.SearchView
-        android:layout_marginTop="23dp"
-        android:layout_marginBottom="29dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/search_bg" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvExplore"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="62dp" />
 
 </LinearLayout>

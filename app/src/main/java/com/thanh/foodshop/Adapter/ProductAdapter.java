@@ -44,13 +44,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         holder.tvQuantity.setText(product.weight);
         holder.tvPrice.setText(product.price);
 
-        // load anh server bang picasso
-        Picasso.get().load(SERVER.food_url + product.image_url).into(holder.imgProduct);
 
         // Chi tiết sản phẩm
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // khởi tạo intent để gọi màn ProductDetailActivity
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 // truyền dữ liệu qua
@@ -59,7 +58,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 intent.putExtra("price", product.price);
 //                intent.putExtra("category_id", product.category_id);
                 intent.putExtra("description", product.description);
-                intent.putExtra("image_uri", product.image_url);
+                intent.putExtra("image_url", SERVER.food_url + product.image_url);
 //                intent.putExtra("last_updated", product.last_updated);
 //                intent.putExtra("expiry_date", product.expiry_date);
                 intent.putExtra("id", product.id);
@@ -71,6 +70,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 context.startActivity(intent);
             }
         });
+
+        // load anh server bang picasso
+        Picasso.get().load(SERVER.food_url + product.image_url).into(holder.imgProduct);
     }
 
     @Override
@@ -78,6 +80,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         return productsData.size();
     }
 }
+
 
 class ProductViewHolder extends RecyclerView.ViewHolder {
     ImageView imgProduct;

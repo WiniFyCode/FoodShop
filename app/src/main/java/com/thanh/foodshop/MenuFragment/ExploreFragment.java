@@ -1,8 +1,93 @@
 package com.thanh.foodshop.MenuFragment;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.thanh.foodshop.Adapter.CategoryAdapter;
+import com.thanh.foodshop.Model.Categories;
+import com.thanh.foodshop.R;
+import com.thanh.foodshop.SERVER;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class ExploreFragment extends Fragment {
 
+    RecyclerView rcvExplore;
+    ArrayList<Categories> categoriesData;
+    CategoryAdapter categoryAdapter;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.explore_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        rcvExplore = view.findViewById(R.id.rcvExplore);
+        categoriesData = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getContext(), categoriesData);
+
+        rcvExplore.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        rcvExplore.setAdapter(categoryAdapter);
+
+        if (categoriesData.isEmpty()) {
+            loadCategories();
+        }
+    }
+
+    private void loadCategories() {
+
+        Response.Listener<String> thanhcong = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject category = jsonArray.getJSONObject(i);
+                        categoriesData.add(new Categories(
+                                category.getInt("id"),
+                                new String(category.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
+                                category.getString("image"),
+                                new String(category.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8)
+                        ));
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    throw new RuntimeException(e);
+                }
+                categoryAdapter.notifyDataSetChanged();
+            }
+        };
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        StringRequest stringRequest = new StringRequest(SERVER.category_php, thanhcong, thatbai);
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+    }
 }
