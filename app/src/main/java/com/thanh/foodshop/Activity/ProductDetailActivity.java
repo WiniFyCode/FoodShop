@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatRatingBar;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,9 +30,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -158,66 +154,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        btnAddToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 1. Get user_id, product_id, and quantity
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                int userId = sharedPreferences.getInt("user_id", -1);
-
-                if (userId == -1) {
-                    Toast.makeText(ProductDetailActivity.this, "Vui lòng đăng nhập trước!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int productId = getIntent().getIntExtra("product_id", -1); // Get product ID from Intent
-                if (productId == -1) {
-                    // Handle error: Product ID not found
-                    return;
-                }
-
-                int quantity = Integer.parseInt(edtQuantity.getText().toString().trim());
-
-                // 2. Create Volley request
-                StringRequest request = new StringRequest(Request.Method.POST, SERVER.add_to_cart_php,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
-                                    if (jsonObject.getBoolean("success")) {
-                                        Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        String error = jsonObject.getString("error");
-                                        Toast.makeText(ProductDetailActivity.this, "Lỗi: " + error, Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(ProductDetailActivity.this, "Lỗi phân tích JSON", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(ProductDetailActivity.this, "Lỗi mạng: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("user_id", String.valueOf(userId));
-                        params.put("product_id", String.valueOf(productId));
-                        params.put("quantity", String.valueOf(quantity));
-                        return params;
-                    }
-                };
-
-                // 3. Add request to queue
-                RequestQueue queue = Volley.newRequestQueue(ProductDetailActivity.this);
-                queue.add(request);
-            }
-        });
     }
 
     private void setupPrice(String price) {
@@ -250,46 +186,4 @@ public class ProductDetailActivity extends AppCompatActivity {
             imgProduct.setImageResource(R.drawable.eye_icon);
         }
     }
-
-    private void addToCart() {
-        // Lấy ID người dùng từ SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("user_id", -1); // Lấy ID, mặc định là -1 nếu không tìm thấy
-
-        if (userId == -1) {
-            Toast.makeText(this, "Vui lòng đăng nhập trước!", Toast.LENGTH_SHORT).show();
-            return; // Nếu không có ID người dùng, ngừng thực hiện
-        }
-
-        Response.Listener<String> thanhcong = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("AddToCartResponse", response);
-                Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        Response.ErrorListener thatbai = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("AddToCartError", error.toString());
-                Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_cart_php, thanhcong, thatbai) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("user_id", String.valueOf(userId)); // Lấy ID người dùng từ SharedPreferences
-                params.put("product_id", String.valueOf(productId));
-                params.put("quantity", String.valueOf(quantity));
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
 }
