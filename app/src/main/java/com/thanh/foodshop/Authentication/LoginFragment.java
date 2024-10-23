@@ -74,7 +74,6 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("LoginFragment", "Đã nhấn nút đăng nhập");  // Thêm log này
                 login();
             }
         });
@@ -95,6 +94,15 @@ public class LoginFragment extends Fragment {
                     try {
                         // Chuyển đổi chuỗi JSON nhận được thành đối tượng người dùng
                         JSONObject user = new JSONObject(response);
+
+                        // Lưu ID, username, password người dùng vào SharedPreferences
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("remember_me", cbRememberMe.isChecked());
+                        editor.putInt("user_id", user.getInt("id"));
+                        editor.putString("username", user.getString("username"));
+                        editor.putString("password", user.getString("password"));
+                        editor.apply();
+
                         ShopFragment.users = new User(
                                 user.getInt("id"),
                                 user.getString("username"),
@@ -105,17 +113,7 @@ public class LoginFragment extends Fragment {
                                 user.getString("role")
                         );
 
-                        // Nếu người dùng chọn nhớ đăng nhập, lưu thông tin vào SharedPreferences
-                        if (cbRememberMe.isChecked()) {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean("remember_me", true);
-                            editor.putString("username", username);
-                            editor.putString("password", password);
-                            editor.apply();
-                        }
-
                         // Chuyển sang giao diện chính sau khi đăng nhập thành công
-
                         Intent intent = new Intent(requireActivity(), BottomNavigationActivity.class);
                         startActivity(intent);
                         requireActivity().finish();

@@ -72,8 +72,12 @@ public class SignupFragment extends Fragment {
         String password = ipedtCrPassword.getText().toString().trim();
 
         // Kiểm tra thông tin
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
+        if (username.isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
+        } else if (email.isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
+        } else if (password.isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
         } else {
 
             Response.Listener<String> thanhcong = new Response.Listener<String>() {
@@ -102,7 +106,6 @@ public class SignupFragment extends Fragment {
             Response.ErrorListener thatbai = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("SignupFragment", "Lỗi kết nối: " + error.getMessage());
                     Toast.makeText(getContext(), "Không thể kết nối với máy chủ", Toast.LENGTH_SHORT).show();
                 }
             };

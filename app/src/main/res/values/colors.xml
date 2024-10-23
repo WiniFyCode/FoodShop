@@ -4,6 +4,7 @@
     <!-- Primary -->
     <color name="Primary_green">#2ECC71</color>
     <color name="Primary_yellow">#FECC4C</color>
+    <color name="Primary_orange">#FE724C</color>
 
     <!--FB - GG-->
     <color name="FacebookBlue">#4A66AC</color>

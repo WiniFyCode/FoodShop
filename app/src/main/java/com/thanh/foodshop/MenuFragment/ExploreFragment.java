@@ -1,7 +1,9 @@
 package com.thanh.foodshop.MenuFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.thanh.foodshop.Adapter.CategoryAdapter;
+import com.thanh.foodshop.Class.CategoryDetail;
 import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -72,11 +76,11 @@ public class ExploreFragment extends Fragment {
                                 new String(category.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8)
                         ));
                     }
+                    categoryAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);
                 }
-                categoryAdapter.notifyDataSetChanged();
             }
         };
         Response.ErrorListener thatbai = new Response.ErrorListener() {

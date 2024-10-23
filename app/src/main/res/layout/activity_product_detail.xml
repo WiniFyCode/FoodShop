@@ -10,8 +10,8 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnBack"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/back"
         android:backgroundTint="@color/Primary_yellow"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,8 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnFavorite"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/tym"
         android:backgroundTint="@color/DarkGray"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
@@ -107,8 +107,8 @@
             android:layout_height="35dp"
             android:background="@drawable/minus_round_icon_48" />
 
-        <TextView
-            android:id="@+id/tvQuantity"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtQuantity"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
@@ -277,8 +277,8 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnAddToCart"
         android:layout_width="match_parent"
-        android:layout_marginStart="7dp"
-        android:layout_marginEnd="7dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_height="67dp"
         android:text="Add To Cart"
         android:background="@drawable/add_to_cart_bg"

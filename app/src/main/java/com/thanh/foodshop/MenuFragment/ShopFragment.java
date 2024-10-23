@@ -1,5 +1,7 @@
 package com.thanh.foodshop.MenuFragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 public class ShopFragment extends Fragment {
 
     public static User users;
+
 
     ViewFlipper viewFlipper;
     RecyclerView rcvExclusiveOffer, rcvBestSelling;
@@ -87,12 +90,10 @@ public class ShopFragment extends Fragment {
         rcvBestSelling.setAdapter(bestSellingAdapter);
 
         // Lay ten user
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", "");
         tvNameUser = view.findViewById(R.id.tvUsername);
-        if (users != null) {
-            tvNameUser.setText("Hello, " + users.username);
-        } else {
-            tvNameUser.setText("Hello");
-        }
+        tvNameUser.setText("Hello, " + username);
 
         // Gọi loadData() ở đây
         loadSilder();
