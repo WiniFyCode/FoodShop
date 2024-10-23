@@ -150,22 +150,28 @@ public class ShopFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
 
-                        // Convert bytes to string
+                        int id = food.getInt("id");
                         String name = new String(food.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String description = new String(food.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String price = new String(food.getString("price").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String weight = food.getString("weight");
+                        int category_id = food.getInt("category_id");
+                        String image_url = food.getString("image_url");
+                        String stock_quantity = food.getString("stock_quantity");
+                        String last_updated = food.getString("last_updated");
+                        String expiry_date = food.getString("expiry_date");
 
                         exclusiveData.add(new Product(
-                                food.getInt("id"),
+                                id,
                                 name,
                                 description,
                                 price,
-                                food.getString("weight"),
-//                                food.getInt("category_id"),
-                                food.getString("image_url")
-//                                food.getString("stock_quantity"),
-//                                food.getString("last_updated"),
-//                                food.getString("expiry_date")
+                                weight,
+                                category_id,
+                                image_url,
+                                stock_quantity,
+                                last_updated,
+                                expiry_date
                         ));
                     }
                     exclusiveAdapter.notifyDataSetChanged();
@@ -199,19 +205,28 @@ public class ShopFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject food = jsonArray.getJSONObject(i);
+                        int id = food.getInt("id");
                         String name = new String(food.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String description = new String(food.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String price = food.getString("price");
+                        String weight = food.getString("weight");
+                        int category_id = food.getInt("category_id");
+                        String image_url = food.getString("image_url");
+                        String stock_quantity = food.getString("stock_quantity");
+                        String last_updated = food.getString("last_updated");
+                        String expiry_date = food.getString("expiry_date");
+
                         bestSellingData.add(new Product(
-                                food.getInt("id"),
+                                id,
                                 name,
                                 description,
-                                food.getString("price"),
-                                food.getString("weight"),
-//                                food.getInt("category_id"),
-                                food.getString("image_url")
-//                                food.getString("stock_quantity"),
-//                                food.getString("last_updated"),
-//                                food.getString("expiry_date")
+                                price,
+                                weight,
+                                category_id,
+                                image_url,
+                                stock_quantity,
+                                last_updated,
+                                expiry_date
                         ));
                     }
                     bestSellingAdapter.notifyDataSetChanged(); // dat o day de dung

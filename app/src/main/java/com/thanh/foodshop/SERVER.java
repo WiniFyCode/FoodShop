@@ -17,8 +17,10 @@ public class SERVER {
     public static String product_categories_php = ip + "product_categories.php";
     public static String category_php = ip + "category.php";
 
-    public static String get_cart_items_php = ip + "get_cart_items.php";
+    public static String get_cart_php = ip + "get_cart.php";
     public static String add_to_cart_php = ip + "add_to_cart.php";
+    public static String update_cart_php = ip + "update_cart.php";
+    public static String delete_from_cart_php = ip + "delete_from_cart.php";
 
 
 }
