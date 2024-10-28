@@ -2,6 +2,8 @@ package com.thanh.foodshop.MenuFragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +16,9 @@ import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.badge.BadgeDrawable;
+import com.thanh.foodshop.Activity.BottomNavigationActivity;
 import com.thanh.foodshop.Adapter.ProductAdapter;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.Model.User;
@@ -39,8 +45,9 @@ import java.util.ArrayList;
 
 public class ShopFragment extends Fragment {
 
+    AppCompatButton btnAddToCart;
+    
     public static User users;
-
 
     ViewFlipper viewFlipper;
     RecyclerView rcvExclusiveOffer, rcvBestSelling;
@@ -161,7 +168,7 @@ public class ShopFragment extends Fragment {
                                 description,
                                 price,
                                 food.getString("weight"),
-                                food.getString("image")
+                                food.getString("image_url")
                         ));
                     }
                     exclusiveAdapter.notifyDataSetChanged();
@@ -206,7 +213,7 @@ public class ShopFragment extends Fragment {
                                 description,
                                 price,
                                 food.getString("weight"),
-                                food.getString("image")
+                                food.getString("image_url")
                         ));
                     }
                     bestSellingAdapter.notifyDataSetChanged(); // dat o day de dung

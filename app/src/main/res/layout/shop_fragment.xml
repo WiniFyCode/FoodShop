@@ -42,12 +42,13 @@
             app:layout_constraintStart_toEndOf="@+id/imgLocateIcon"
             app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
 
-        <ImageView
-            android:id="@+id/imgBellIcon"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_margin="15dp"
-            android:src="@drawable/bell"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNotifications"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/bell"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

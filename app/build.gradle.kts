@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.volley)
     implementation(libs.picasso)
     implementation(libs.circleimageview)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

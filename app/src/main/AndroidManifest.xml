@@ -15,22 +15,18 @@
         android:theme="@style/Theme.FoodShop"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Activity.CartActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.ProductDetailActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.BottomNavigationActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Authentication.Authentication_Container"
             android:exported="true">

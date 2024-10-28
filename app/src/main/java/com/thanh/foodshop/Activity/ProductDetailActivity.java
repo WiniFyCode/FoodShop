@@ -1,5 +1,6 @@
 package com.thanh.foodshop.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -28,8 +29,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
+import com.thanh.foodshop.MenuFragment.CartFragment;
+import com.thanh.foodshop.Model.Cart;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,7 +92,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvNameProduct.setText(name);
         setupPrice(price);
         tvDescription.setText(description);
-        tvDescription.setText(description);
         if (weight == null || weight.equals("null")) {
             tvWeight.setText("...");
         } else {
@@ -141,10 +146,14 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (!s.toString().isEmpty()) {
                     try {
                         quantity = Integer.parseInt(s.toString());
+                        if (quantity < 0) {
+                            quantity = 0;
+                            edtQuantity.setText("0");
+                        }
                     } catch (NumberFormatException e) {
-                        // Nếu không thể chuyển đổi, thiết lập quantity về 1
-                        quantity = 1;
-                        edtQuantity.setText("1");
+                        // Nếu không thể chuyển đổi, thiết lập quantity về 0
+                        quantity = 0;
+                        edtQuantity.setText("0");
                     }
                 }
             }
@@ -154,6 +163,17 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToCart();
+            }
+        });
+    }
+
+
+    private void addToCart() {
+        Toast.makeText(this, "Đã thêm sản phẩm vào giỏ hàng", Toast.LENGTH_SHORT).show();
     }
 
     private void setupPrice(String price) {

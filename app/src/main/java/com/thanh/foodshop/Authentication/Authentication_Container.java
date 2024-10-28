@@ -19,7 +19,7 @@ public class Authentication_Container extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager2;
 
-    ArrayList<Fragment> mangfragments = new ArrayList<>();
+    ArrayList<Fragment> fragmentlist     = new ArrayList<>();
     FragmentManager fragmentManager;
 
     @Override
@@ -32,11 +32,11 @@ public class Authentication_Container extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager2 = findViewById(R.id.viewPager2);
 
-        mangfragments.add(new LoginFragment());
-        mangfragments.add(new SignupFragment());
+        fragmentlist    .add(new LoginFragment());
+        fragmentlist    .add(new SignupFragment());
 
         fragmentManager = getSupportFragmentManager();
-        ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle(), mangfragments);
+        ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle(), fragmentlist   );
         viewPager2.setAdapter(viewPager2Adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("LOGIN"));
@@ -45,7 +45,7 @@ public class Authentication_Container extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager2.setCurrentItem(tab.getPosition());
+                viewPager2.setCurrentItem(tab.getPosition() , true);
             }
 
             @Override

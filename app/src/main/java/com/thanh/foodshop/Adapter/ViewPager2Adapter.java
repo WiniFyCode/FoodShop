@@ -10,26 +10,26 @@ import java.util.ArrayList;
 
 public class ViewPager2Adapter extends FragmentStateAdapter {
 
-    ArrayList<Fragment> mangfragments;
+    ArrayList<Fragment> fragmentlist;
 
-    public ViewPager2Adapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, ArrayList<Fragment> mangfragments) {
+    public ViewPager2Adapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, ArrayList<Fragment> fragmentlist) {
 
         super(fragmentManager, lifecycle);
-        this.mangfragments = mangfragments;
+        this.fragmentlist = fragmentlist;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return mangfragments.get(position);
+        return fragmentlist.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return mangfragments.size();
+        return fragmentlist.size();
     }
 
     public Fragment getFragment(int position) {
-        return mangfragments.get(position);
+        return fragmentlist.get(position);
     }
 }

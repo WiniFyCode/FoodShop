@@ -3,7 +3,11 @@
     <style name="Base.Theme.FoodShop" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="fontFamily">@font/poppins</item>
     </style>
 
-    <style name="Theme.FoodShop" parent="Base.Theme.FoodShop" />
+    <style name="Theme.FoodShop" parent="Base.Theme.FoodShop" >
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
 </resources>
