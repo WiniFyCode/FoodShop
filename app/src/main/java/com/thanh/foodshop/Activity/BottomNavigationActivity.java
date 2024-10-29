@@ -19,9 +19,16 @@ import com.thanh.foodshop.MenuFragment.ExploreFragment;
 import com.thanh.foodshop.MenuFragment.FavoriteFragment;
 import com.thanh.foodshop.MenuFragment.ProfileFragment;
 import com.thanh.foodshop.MenuFragment.ShopFragment;
+import com.thanh.foodshop.Model.Cart;
+import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
 
+import java.util.ArrayList;
+
 public class BottomNavigationActivity extends AppCompatActivity {
+
+    public static User USER;
+    public static ArrayList<Cart> CART = new ArrayList<>();
 
     BottomNavigationView bottomNavigationView;
 
@@ -58,27 +65,22 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.shop:
-                        Toast.makeText(BottomNavigationActivity.this, "Shop", Toast.LENGTH_SHORT).show();
                         LoadFragment(shopFragment);
                         break;
 
                     case R.id.explore:
-                        Toast.makeText(BottomNavigationActivity.this, "Explore", Toast.LENGTH_SHORT).show();
                         LoadFragment(exploreFragment);
                         break;
 
                     case R.id.cart:
-                        Toast.makeText(BottomNavigationActivity.this, "Cart", Toast.LENGTH_SHORT).show();
                         LoadFragment(cartFragment);
                         break;
 
                     case R.id.favorite:
-                        Toast.makeText(BottomNavigationActivity.this, "Favorite", Toast.LENGTH_SHORT).show();
                         LoadFragment(favoriteFragment);
                         break;
 
                     case R.id.profile:
-                        Toast.makeText(BottomNavigationActivity.this, "Profile", Toast.LENGTH_SHORT).show();
                         LoadFragment(profileFragment);
                         break;
                 }

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.thanh.foodshop.Adapter.ViewPager2Adapter;
 import com.thanh.foodshop.MenuProfile.AccountFragment;
 import com.thanh.foodshop.MenuProfile.HistoryFragment;
@@ -27,6 +26,7 @@ public class ProfileFragment extends Fragment {
 
     ArrayList<Fragment> fragmentlist = new ArrayList<>();
     FragmentManager fragmentManager;
+    ViewPager2Adapter viewPager2Adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,8 +41,9 @@ public class ProfileFragment extends Fragment {
         fragmentlist.add(new HistoryFragment());
 
         fragmentManager = getChildFragmentManager();
-        ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle(), fragmentlist);
+        viewPager2Adapter = new ViewPager2Adapter(getChildFragmentManager(), getLifecycle(), fragmentlist);
         viewPager2.setAdapter(viewPager2Adapter);
+        viewPager2.setSaveEnabled(false);
 
         tabLayout.addTab(tabLayout.newTab().setText("ACCOUNT"));
         tabLayout.addTab(tabLayout.newTab().setText("PAYMENT METHOD"));

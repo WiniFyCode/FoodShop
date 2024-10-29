@@ -1,6 +1,7 @@
 package com.thanh.foodshop.MenuFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.badge.BadgeDrawable;
 import com.thanh.foodshop.Activity.BottomNavigationActivity;
 import com.thanh.foodshop.Adapter.ProductAdapter;
+import com.thanh.foodshop.Class.SeeAll;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
@@ -45,8 +47,6 @@ import java.util.ArrayList;
 
 public class ShopFragment extends Fragment {
 
-    AppCompatButton btnAddToCart;
-    
     public static User users;
 
     ViewFlipper viewFlipper;
@@ -61,6 +61,7 @@ public class ShopFragment extends Fragment {
 
     // Ten user
     TextView tvNameUser;
+    TextView tvSeeAllExclusive, tvSeeAllBestSelling;
 
     @Nullable
     @Override
@@ -101,6 +102,28 @@ public class ShopFragment extends Fragment {
         String username = sharedPreferences.getString("username", "");
         tvNameUser = view.findViewById(R.id.tvUsername);
         tvNameUser.setText("Hello, " + username);
+
+        // Click xem thêm
+        tvSeeAllExclusive = view.findViewById(R.id.tvSellAllExclusive);
+        tvSeeAllBestSelling = view.findViewById(R.id.tvSellAllBestSelling);
+
+        tvSeeAllExclusive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAll.class);
+                intent.putExtra("category", "Exclusive Offer");
+                startActivity(intent);
+            }
+        });
+
+        tvSeeAllBestSelling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAll.class);
+                intent.putExtra("category", "Best Selling");
+                startActivity(intent);
+            }
+        });
 
         // Gọi loadData() ở đây
         loadSilder();
