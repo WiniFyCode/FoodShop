@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class ExploreFragment extends Fragment {
@@ -38,6 +40,8 @@ public class ExploreFragment extends Fragment {
     RecyclerView rcvExplore;
     ArrayList<Categories> categoriesData;
     CategoryAdapter categoryAdapter;
+
+    SearchView searchView;
 
     @Nullable
     @Override
@@ -56,10 +60,23 @@ public class ExploreFragment extends Fragment {
         rcvExplore.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rcvExplore.setAdapter(categoryAdapter);
 
+        searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterCategories(newText);
+                return true;
+            }
+        });
+
         if (categoriesData.isEmpty()) {
             loadCategories();
         }
-
     }
 
     private void loadCategories() {
@@ -95,5 +112,26 @@ public class ExploreFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(SERVER.category_php, thanhcong, thatbai);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
+    }
+
+    private void filterCategories(String query) {
+        query = query.toLowerCase();
+        if (query.isEmpty()) {
+            categoryAdapter.setCategories(categoriesData);
+        } else {
+            ArrayList<Categories> filteredCategories = new ArrayList<>();
+            // Bo di cac ky tu dac biet
+            String queryNoMark = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+            // Normalizer.NFD là một phương thức trong Java để chuyển chuỗi văn bản sang dạng Unicode Normalization Form D (NFD)
+            for (Categories category : categoriesData) {
+                String categoryName = category.getName().toLowerCase();
+                String categoryNameNoMark = Normalizer.normalize(categoryName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+                if (categoryNameNoMark.contains(queryNoMark)) {
+                    filteredCategories.add(category);
+                }
+            }
+            categoryAdapter.setCategories(filteredCategories);
+        }
+        categoryAdapter.notifyDataSetChanged();
     }
 }

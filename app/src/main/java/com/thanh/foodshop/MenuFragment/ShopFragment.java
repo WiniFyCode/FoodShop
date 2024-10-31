@@ -18,6 +18,7 @@ import android.widget.ViewFlipper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.thanh.foodshop.Activity.BottomNavigationActivity;
 import com.thanh.foodshop.Adapter.ProductAdapter;
 import com.thanh.foodshop.Class.SeeAll;
+import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
@@ -43,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class ShopFragment extends Fragment {
@@ -62,6 +65,9 @@ public class ShopFragment extends Fragment {
     // Ten user
     TextView tvNameUser;
     TextView tvSeeAllExclusive, tvSeeAllBestSelling;
+
+    // search view
+    SearchView searchView;
 
     @Nullable
     @Override
@@ -122,6 +128,21 @@ public class ShopFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), SeeAll.class);
                 intent.putExtra("category", "Best Selling");
                 startActivity(intent);
+            }
+        });
+
+        // search view
+        searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterData(newText);
+                return true;
             }
         });
 
@@ -258,5 +279,34 @@ public class ShopFragment extends Fragment {
         // B2: Dung request với Volley
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
+    }
+
+    private void filterData(String query) {
+        if (query.isEmpty()) {
+            exclusiveAdapter.setData(exclusiveData);
+            bestSellingAdapter.setData(bestSellingData);
+        } else {
+            ArrayList<Product> filteredExclusiveData = new ArrayList<>();
+            ArrayList<Product> filteredBestSellingData = new ArrayList<>();
+
+            String queryNoMark = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+
+            for (Product product : exclusiveData) {
+                String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+                if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
+                    filteredExclusiveData.add(product);
+                }
+            }
+
+            for (Product product : bestSellingData) {
+                String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+                if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
+                    filteredBestSellingData.add(product);
+                }
+            }
+
+            exclusiveAdapter.setData(filteredExclusiveData);
+            bestSellingAdapter.setData(filteredBestSellingData);
+        }
     }
 }

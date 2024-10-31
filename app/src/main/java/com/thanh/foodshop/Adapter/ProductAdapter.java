@@ -23,6 +23,7 @@ import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     Context context;
@@ -32,6 +33,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         this.productsData = productsData;
         this.context = context;
     }
+
+    // Phương thức để cập nhật dữ liệu o SHOP FRAGMENT ( SEARCH )
+    public void setData(ArrayList<Product> productsData) {
+        this.productsData = productsData;
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override

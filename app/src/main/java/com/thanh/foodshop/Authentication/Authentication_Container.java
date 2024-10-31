@@ -1,25 +1,25 @@
-    package com.thanh.foodshop.Authentication;
+package com.thanh.foodshop.Authentication;
 
-    import android.os.Bundle;
+import android.os.Bundle;
 
-    import androidx.activity.EdgeToEdge;
-    import androidx.appcompat.app.AppCompatActivity;
-    import androidx.fragment.app.Fragment;
-    import androidx.fragment.app.FragmentManager;
-    import androidx.viewpager2.widget.ViewPager2;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
-    import com.google.android.material.tabs.TabLayout;
-    import com.thanh.foodshop.Adapter.ViewPager2Adapter;
-    import com.thanh.foodshop.R;
+import com.google.android.material.tabs.TabLayout;
+import com.thanh.foodshop.Adapter.ViewPager2Adapter;
+import com.thanh.foodshop.R;
 
-    import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class Authentication_Container extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager2 viewPager2;
 
-    ArrayList<Fragment> fragmentlist     = new ArrayList<>();
+    ArrayList<Fragment> fragmentlist = new ArrayList<>();
     FragmentManager fragmentManager;
 
     @Override
@@ -32,11 +32,11 @@ public class Authentication_Container extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager2 = findViewById(R.id.viewPager2);
 
-        fragmentlist    .add(new LoginFragment());
-        fragmentlist    .add(new SignupFragment());
+        fragmentlist.add(new LoginFragment());
+        fragmentlist.add(new SignupFragment());
 
         fragmentManager = getSupportFragmentManager();
-        ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle(), fragmentlist   );
+        ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle(), fragmentlist);
         viewPager2.setAdapter(viewPager2Adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("LOGIN"));
@@ -45,7 +45,7 @@ public class Authentication_Container extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager2.setCurrentItem(tab.getPosition() , true);
+                viewPager2.setCurrentItem(tab.getPosition(), true);
             }
 
             @Override

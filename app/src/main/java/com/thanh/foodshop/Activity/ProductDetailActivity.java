@@ -1,6 +1,9 @@
 package com.thanh.foodshop.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +11,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,20 +22,38 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatRatingBar;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
+import com.thanh.foodshop.Authentication.LoginFragment;
+import com.thanh.foodshop.Class.FavoriteManager;
+import com.thanh.foodshop.MenuFragment.FavoriteFragment;
+import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
+import com.thanh.foodshop.SERVER;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
-    AppCompatButton btnBack, btnFavorite, btnMinus, btnPlus, btnMoreDes, btnAddToCart, btnMoreNut, btnMoreReview;
-    ImageView imgProduct;
+    AppCompatButton btnBack, btnMinus, btnPlus, btnMoreDes, btnAddToCart, btnMoreNut, btnMoreReview;
+    ImageView imgProduct, imgFavorite;
     TextView tvNameProduct, tvWeight, tvPrice, tvDescription, tvNutritions;
     TextInputEditText edtQuantity;
     AppCompatRatingBar ratingBar;
 
     int quantity = 1; // đặt số lượng mặc định khi người dùng ấn add to cart
     int productId; // Khai báo productId
+    private Product product;
+    
+    public boolean isFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +66,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Ánh xạ các component
         btnBack = findViewById(R.id.btnBack);
         imgProduct = findViewById(R.id.imgProduct);
-        btnFavorite = findViewById(R.id.btnFavorite);
+        imgFavorite = findViewById(R.id.imgFavorite);
         tvNameProduct = findViewById(R.id.tvNameProduct);
         tvWeight = findViewById(R.id.tvWeight);
         tvPrice = findViewById(R.id.tvPrice);
@@ -65,7 +87,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String price = intent.getStringExtra("price");
         String weight = intent.getStringExtra("weight");
         String image = intent.getStringExtra("image_url");
-        productId = intent.getIntExtra("product_id", 0); // Lưu productId
+        productId = intent.getIntExtra("product_id", 0);
 
         // Xóa background mặc định
         imgProduct.setBackground(null);
@@ -80,6 +102,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             tvWeight.setText(weight);
         }
         loadImage(image);
+
+        product = (Product) intent.getSerializableExtra("product");
 
         // back lại
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -151,11 +175,59 @@ public class ProductDetailActivity extends AppCompatActivity {
                 addToCart();
             }
         });
+
+        // Ví dụ về cách lưu sản phẩm vào danh sách yêu thích
+        imgFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lấy thông tin sản phẩm
+                Product product = getProductDetails();
+
+                // Lưu sản phẩm vào danh sách yêu thích
+                if (!isFavorite) {
+                    isFavorite = true;
+                    FavoriteManager.addFavorite(product);
+                    imgFavorite.setImageResource(R.drawable.favorite_red);
+                    imgFavorite.setBackgroundColor(Color.TRANSPARENT);
+                    Toast.makeText(ProductDetailActivity.this, "Đã thêm sản phẩm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    isFavorite = false;
+                    FavoriteManager.removeFavorite(product);
+                    imgFavorite.setImageResource(R.drawable.carbon_favorite);
+                    imgFavorite.setBackgroundColor(Color.TRANSPARENT);
+                    Toast.makeText(ProductDetailActivity.this, "Đã xóa sản phẩm khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 
     private void addToCart() {
-        Toast.makeText(this, "Đã thêm sản phẩm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+        int userId = LoginFragment.getUserId(this); //  user_id khi đăng nhập
+                    Log.d("userId", "userId: " + userId);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_cart_php,
+                response -> {
+                    if (response.equals("success")) {
+                        Toast.makeText(this, "Đã thêm sản phẩm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Lỗi kết nối", Toast.LENGTH_SHORT).show()) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                params.put("product_id", String.valueOf(productId));
+                params.put("quantity", String.valueOf(quantity));
+                Log.d("AddToCartParams", "user_id: " + userId + ", product_id: " + productId + ", quantity: " + quantity);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void setupPrice(String price) {
@@ -187,5 +259,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         } else {
             imgProduct.setImageResource(R.drawable.eye_icon);
         }
+    }
+
+    private Product getProductDetails() {
+        return product;
     }
 }

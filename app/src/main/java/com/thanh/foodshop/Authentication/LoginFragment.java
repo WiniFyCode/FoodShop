@@ -101,6 +101,10 @@ public class LoginFragment extends Fragment {
                         editor.putInt("user_id", user.getInt("id"));
                         editor.putString("username", user.getString("username"));
                         editor.putString("password", user.getString("password"));
+                        editor.putString("email", user.getString("email"));
+                        editor.putString("address", user.getString("address"));
+                        editor.putString("phone_number", user.getString("phone_number"));
+                        editor.putString("role", user.getString("role"));
                         editor.apply();
 
                         ShopFragment.users = new User(
@@ -156,14 +160,14 @@ public class LoginFragment extends Fragment {
     }
 
     public void saveUserId(int userId) {
-        SharedPreferences preferences = getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("user_id", userId);
         editor.apply();
     }
 
     public static int getUserId(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
         return preferences.getInt("user_id", -1); // -1 là giá trị mặc định nếu không tìm thấy
     }
 }

@@ -27,12 +27,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnFavorite"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/tym"
-        android:backgroundTint="@color/DarkGray"
+    <ImageView
+        android:id="@+id/imgFavorite"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/carbon_favorite"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,10 +42,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="45dp"
-        android:maxLines="2"
+        android:layout_marginEnd="10dp"
         android:ellipsize="end"
         android:maxWidth="350dp"
-        android:layout_marginEnd="10dp"
+        android:maxLines="2"
         android:text="Banana"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -86,8 +85,8 @@
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/Primary_green"
             android:text="50,000"
+            android:textColor="@color/Primary_green"
             android:textSize="23sp"
             android:textStyle="bold" />
 
@@ -96,8 +95,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="7dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -171,9 +170,9 @@
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_height="wrap_content"
         android:text="Bananas are nutritious. Bananas may be good for weight loss. Bananas may be good for your heart. As part of a healthful and varied diet."
         android:textAlignment="inherit"
         android:textSize="16sp"
@@ -194,9 +193,9 @@
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
+        android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="7"
         app:layout_constraintStart_toStartOf="@+id/tvDescription"
@@ -215,8 +214,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
-            android:textSize="16sp"
-            android:text="100calor / 100g" />
+            android:text="100calor / 100g"
+            android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnMoreNut"
@@ -256,15 +255,15 @@
 
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/ratingBar"
-            android:rating="4"
-            android:stepSize="0.5"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:layout_marginTop="3dp"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:layout_weight="1"
+            android:rating="4"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:stepSize="0.5" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnMoreReview"
@@ -277,16 +276,16 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnAddToCart"
         android:layout_width="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_height="67dp"
-        android:text="Add To Cart"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/add_to_cart_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@color/white"
+        android:text="Add To Cart"
         android:textAllCaps="false"
+        android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 

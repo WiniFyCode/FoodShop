@@ -42,34 +42,47 @@
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_marginTop="40dp"
-            android:src="@drawable/profile"
+            android:background="@drawable/profile_icon"
             app:civ_border_color="@color/holo_yellow_light"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvProfile" />
+            app:layout_constraintTop_toBottomOf="@+id/tvProfile" >
+
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:layout_width="96dp"-->
+<!--            android:layout_height="96dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/profile_image"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/profile_image"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/profile_image"-->
+<!--            app:lottie_autoPlay="true"-->
+<!--            app:lottie_rawRes="@raw/profile" />-->
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tvNameUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="name user"
-            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/profile_image"
             app:layout_constraintStart_toStartOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/tvEmailUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email@gmail.com"
             android:textColor="@color/holo_gray_light"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView6"
-            app:layout_constraintStart_toStartOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintEnd_toEndOf="@+id/tvNameUser"
+            app:layout_constraintStart_toStartOf="@+id/tvNameUser"
+            app:layout_constraintTop_toBottomOf="@+id/tvNameUser" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/proTabLayout"
