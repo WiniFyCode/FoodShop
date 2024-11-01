@@ -17,8 +17,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.CheckOutActivity"
+            android:name=".Activity.SearchActivity"
             android:exported="true" >
+
+
+        </activity>
+        <activity
+            android:name=".Activity.CheckOutActivity"
+            android:exported="true">
+
         </activity>
         <activity
             android:name=".Class.SeeAll"
@@ -38,8 +45,10 @@
         <activity
             android:name=".Authentication.Authentication_Container"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

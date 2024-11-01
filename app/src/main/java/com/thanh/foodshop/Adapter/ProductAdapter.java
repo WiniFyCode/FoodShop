@@ -105,7 +105,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 intent.putExtra("price", product.price);
                 intent.putExtra("description", product.description);
                 intent.putExtra("image_url", SERVER.food_url + product.image_url);
-                intent.putExtra("id", product.id);
+                intent.putExtra("product_id", product.id);
                 intent.putExtra("weight", product.weight);
 
                 // chuyển trang

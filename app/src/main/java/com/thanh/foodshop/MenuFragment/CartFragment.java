@@ -52,6 +52,8 @@ public class CartFragment extends Fragment {
     TextView tvSubtotal, tvDeliveryFee, tvTotalTax;
     AppCompatButton btnCheckout;
 
+    public static double totalPrice = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.cart_fragment, container, false);
@@ -73,25 +75,28 @@ public class CartFragment extends Fragment {
         recyclerView.setAdapter(cartAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        totalPrice = 0;
+        tvTotal.setText(totalPrice + "VND");
+
         loadCartItems();
 
         btnCheckout = view.findViewById(R.id.btnGotoCheckout);
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BottomNavigationActivity.USER == null) {
-                    Intent intent = new Intent(getContext(), BottomNavigationActivity.class);
-                    startActivity(intent);
-                    return;
+                totalPrice = 0;
+                for (Cart cart : cartItems) {
+                    if (cart.quantity > 0) {
+                        totalPrice = cart.total_price * cart.quantity;
+                        Intent intent = new Intent(getContext(), CheckOutActivity.class);
+                        intent.putExtra("totalPrice", totalPrice);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-                if (Double.parseDouble(tvTotal.getText().toString().trim().replace("VND", "")) == 0) {
-                    Toast.makeText(getContext(), "Chưa có sản phẩm trong giỏ hàng", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Intent intent = new Intent(getContext(), CheckOutActivity.class);
-                startActivity(intent);
+                CartFragment.tvTotal.setText(totalPrice + "VND");
             }
         });
 
@@ -109,23 +114,19 @@ public class CartFragment extends Fragment {
             public void onResponse(String response) {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
-                    if (jsonArray.length() > 0) {
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject cart = jsonArray.getJSONObject(i);
-                            cartItems.add(new Cart(
-                                    cart.getInt("id"),
-                                    cart.getInt("product_id"),
-                                    cart.getInt("user_id"),
-                                    new String(cart.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
-                                    cart.getDouble("price"),
-                                    cart.getInt("quantity"),
-                                    cart.getString("image_url"),
-                                    cart.getDouble("total_price")
-                            ));
-                            cartAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        Toast.makeText(getContext(), "Không có sản phẩm trong giỏ hàng của mã khách hàng " + BottomNavigationActivity.USER.id, Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject cart = jsonArray.getJSONObject(i);
+                        cartItems.add(new Cart(
+                                cart.getInt("id"),
+                                cart.getInt("product_id"),
+                                cart.getInt("user_id"),
+                                new String(cart.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
+                                cart.getDouble("price"),
+                                cart.getInt("quantity"),
+                                cart.getString("image_url"),
+                                cart.getDouble("total_price")
+                        ));
+                        cartAdapter.notifyDataSetChanged();
                     }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -137,7 +138,7 @@ public class CartFragment extends Fragment {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "Không có dữ liệu giỏ hàng của mã khách hàng trong hệ thống" + BottomNavigationActivity.USER.id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Không có dữ liệu giỏ hàng của mã khach hang trong he thong" + BottomNavigationActivity.USER.id, Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -146,22 +147,11 @@ public class CartFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                if (BottomNavigationActivity.USER != null) {
-                    params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
-                }
+                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
                 return params;
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
-
-    }
-
-    public static void updateTotal() {
-        double total = 0;
-        for (int i = 0; i < cartItems.size(); i++) {
-            total += cartItems.get(i).getTotalPrice();
-        }
-        tvTotal.setText(String.valueOf(total));
     }
 }

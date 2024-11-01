@@ -3,10 +3,7 @@ package com.thanh.foodshop.MenuFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +14,8 @@ import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,11 +24,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.badge.BadgeDrawable;
-import com.thanh.foodshop.Activity.BottomNavigationActivity;
+import com.thanh.foodshop.Activity.SearchActivity;
 import com.thanh.foodshop.Adapter.ProductAdapter;
 import com.thanh.foodshop.Class.SeeAll;
-import com.thanh.foodshop.Model.Categories;
+
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
@@ -45,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class ShopFragment extends Fragment {
@@ -133,16 +126,11 @@ public class ShopFragment extends Fragment {
 
         // search view
         searchView = view.findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterData(newText);
-                return true;
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -281,32 +269,32 @@ public class ShopFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
-    private void filterData(String query) {
-        if (query.isEmpty()) {
-            exclusiveAdapter.setData(exclusiveData);
-            bestSellingAdapter.setData(bestSellingData);
-        } else {
-            ArrayList<Product> filteredExclusiveData = new ArrayList<>();
-            ArrayList<Product> filteredBestSellingData = new ArrayList<>();
+    // private void filterData(String query) {
+    //     if (query.isEmpty()) {
+    //         exclusiveAdapter.setData(exclusiveData);
+    //         bestSellingAdapter.setData(bestSellingData);
+    //     } else {
+    //         ArrayList<Product> filteredExclusiveData = new ArrayList<>();
+    //         ArrayList<Product> filteredBestSellingData = new ArrayList<>();
 
-            String queryNoMark = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    //         String queryNoMark = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
-            for (Product product : exclusiveData) {
-                String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-                if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
-                    filteredExclusiveData.add(product);
-                }
-            }
+    //         for (Product product : exclusiveData) {
+    //             String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    //             if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
+    //                 filteredExclusiveData.add(product);
+    //             }
+    //         }
 
-            for (Product product : bestSellingData) {
-                String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-                if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
-                    filteredBestSellingData.add(product);
-                }
-            }
+    //         for (Product product : bestSellingData) {
+    //             String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    //             if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
+    //                 filteredBestSellingData.add(product);
+    //             }
+    //         }
 
-            exclusiveAdapter.setData(filteredExclusiveData);
-            bestSellingAdapter.setData(filteredBestSellingData);
-        }
-    }
+    //         exclusiveAdapter.setData(filteredExclusiveData);
+    //         bestSellingAdapter.setData(filteredBestSellingData);
+    //     }
+    // }
 }

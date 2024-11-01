@@ -153,7 +153,7 @@
             android:textColor="@color/holo_red_light"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/tvTotalTax"
-            app:layout_constraintTop_toBottomOf="@+id/view" />" />
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

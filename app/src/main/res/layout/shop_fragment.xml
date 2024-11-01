@@ -67,8 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/search_bg"
-                android:hint="Search what you need..."
-                app:iconifiedByDefault="true" />
+                android:hint="Search what you need..."/>
 
         </androidx.appcompat.widget.Toolbar>
     </androidx.constraintlayout.widget.ConstraintLayout>

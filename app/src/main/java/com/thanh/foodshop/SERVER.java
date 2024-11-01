@@ -23,6 +23,7 @@ public class SERVER {
     public static String delete_from_cart_php = ip + "delete_from_cart.php";
 
     public static String see_all_php = ip + "see_all.php";
+    public static String get_all_product_php = ip + "get_all_product.php";
 
 
 }
