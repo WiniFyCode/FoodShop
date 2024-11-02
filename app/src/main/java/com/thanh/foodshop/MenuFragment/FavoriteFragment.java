@@ -22,13 +22,27 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.thanh.foodshop.Activity.BottomNavigationActivity;
 import com.thanh.foodshop.Activity.ProductDetailActivity;
 import com.thanh.foodshop.Adapter.FavoriteAdapter;
 import com.thanh.foodshop.Class.FavoriteManager;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
+import com.thanh.foodshop.SERVER;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FavoriteFragment extends Fragment {
     RecyclerView rcvFavorite;
@@ -53,6 +67,8 @@ public class FavoriteFragment extends Fragment {
         rcvFavorite.setAdapter(favoriteAdapter);
         rcvFavorite.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvFavorite.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        loadFavoriteProducts();
 
         btnDetail = view.findViewById(R.id.btnDetail);
         if (btnDetail != null) {
@@ -109,5 +125,53 @@ public class FavoriteFragment extends Fragment {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rcvFavorite);
+    }
+
+    private void loadFavoriteProducts() {
+
+        Response.Listener<String> thanhcong = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Product favoriteProduct = new Product(
+                                jsonObject.getInt("id"),
+                                jsonObject.getString("name"),
+                                jsonObject.getString("description"),
+                                jsonObject.getString("price"),
+                                jsonObject.getString("weight"),
+                                jsonObject.getString("image")
+                        );
+
+                        favoriteProducts.add(favoriteProduct);
+                    }
+                } catch (Exception e) {
+                    Log.d("FavoriteFragment", "Load favorite products: " + e.getMessage());
+                }
+            }
+        };
+
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("FavoriteFragment", "Load favorite products: " + error.getMessage());
+            }
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.get_favorite_php, thanhcong, thatbai ) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
+                Log.d("FavoriteFragment", "user_id: " + String.valueOf(BottomNavigationActivity.USER.id));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
     }
 }

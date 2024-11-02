@@ -25,6 +25,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvExplore"
+        android:layout_marginStart="11dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="57dp" />

@@ -1,8 +1,6 @@
 package com.thanh.foodshop.Activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -34,7 +32,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Authentication.LoginFragment;
 import com.thanh.foodshop.Class.FavoriteManager;
-import com.thanh.foodshop.MenuFragment.FavoriteFragment;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -51,7 +48,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     AppCompatRatingBar ratingBar;
 
     int quantity = 1; // đặt số lượng mặc định khi người dùng ấn add to cart
-    int productId; // Khai báo productId
+    int productId = -1;
     private Product product;
 
     public boolean isFavorite = false;
@@ -174,35 +171,20 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int quantity = Integer.parseInt(edtQuantity.getText().toString());
                 addToCart();
             }
         });
 
-        // Ví dụ về cách lưu sản phẩm vào danh sách yêu thích
         imgFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Lấy thông tin sản phẩm
-                Product product = getProductDetails();
-
-                // Lưu sản phẩm vào danh sách yêu thích
-                if (!isFavorite) {
-                    isFavorite = true;
-                    FavoriteManager.addFavorite(product);
-                    imgFavorite.setImageResource(R.drawable.favorite_red);
-                    imgFavorite.setBackgroundColor(Color.TRANSPARENT);
-                    Toast.makeText(ProductDetailActivity.this, "Đã thêm sản phẩm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                } else {
-                    isFavorite = false;
-                    FavoriteManager.removeFavorite(product);
-                    imgFavorite.setImageResource(R.drawable.carbon_favorite);
-                    imgFavorite.setBackgroundColor(Color.TRANSPARENT);
-                    Toast.makeText(ProductDetailActivity.this, "Đã xóa sản phẩm khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                }
+            public void onClick(View view) {
+                isFavorite = !isFavorite;
+                updateFavoriteStatus();
+                Toast.makeText(ProductDetailActivity.this, isFavorite ? "Đã thêm vào danh sách yêu thích" : "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     private void addToCart() {
         Response.Listener<String> thanhCong = new Response.Listener<String>() {
@@ -210,9 +192,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 if (response.equals("success")) {
                     Toast.makeText(ProductDetailActivity.this, "Đã thêm sản phẩm vào giỏ hàng", Toast.LENGTH_LONG).show();
-                    // clear giá trị
-                    productId = -1;
-                    quantity = -1;
                 } else {
                     Toast.makeText(ProductDetailActivity.this, "Thêm thất bại do lỗi: " + response.toString(), Toast.LENGTH_LONG).show();
                 }
@@ -280,5 +259,101 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private Product getProductDetails() {
         return product;
+    }
+
+    private void addToFavorite() {
+        if (BottomNavigationActivity.USER == null) {
+            return;
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    FavoriteManager.addFavorite(product);
+                    isFavorite = true;
+                    updateFavoriteStatus();
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, response, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ProductDetailActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
+                params.put("product_id", String.valueOf(product.getId()));
+
+                return params;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
+    private void removeFromFavorite() {
+        if (BottomNavigationActivity.USER == null) {
+            return;
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.delete_from_cart_php, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    FavoriteManager.removeFavorite(product);
+                    isFavorite = false;
+                    updateFavoriteStatus();
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, response, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ProductDetailActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
+                params.put("product_id", String.valueOf(product.getId()));
+
+                return params;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
+    private void updateFavoriteStatus() {
+        if (isFavorite) {
+            // Cập nhật trạng thái yêu thích trên giao diện người dùng
+            imgFavorite.setImageResource(R.drawable.favorite_red);
+
+            // Cập nhật trạng thái yêu thích trên server
+            if (BottomNavigationActivity.USER != null) {
+                addToFavorite();
+            }
+        } else {
+            // Cập nhật trạng thái yêu thích trên giao diện người dùng
+            imgFavorite.setImageResource(R.drawable.favorite_white);
+
+            // Xóa trạng thái yêu thích trên server
+            if (BottomNavigationActivity.USER != null) {
+                removeFromFavorite();
+            }
+        }
     }
 }

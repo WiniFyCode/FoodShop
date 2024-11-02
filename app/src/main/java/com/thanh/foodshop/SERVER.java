@@ -25,5 +25,11 @@ public class SERVER {
     public static String see_all_php = ip + "see_all.php";
     public static String get_all_product_php = ip + "get_all_product.php";
 
+    public static String get_favorite_php = ip + "get_favorite.php";
+    public static String add_to_favorite_php = ip + "add_to_favorite.php";
+    public static String delete_from_favorite_php = ip + "delete_favorite.php";
 
+    //TEST
+    public static String add_to_cart_test_php = ip + "add_to_cart_test.php";
 }
+
