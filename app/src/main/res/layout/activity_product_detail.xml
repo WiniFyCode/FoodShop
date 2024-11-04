@@ -9,6 +9,8 @@
     tools:context=".Activity.ProductDetailActivity">
 
     <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginTop="2dp"
+        android:gravity="center"
         android:id="@+id/btnBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -46,7 +48,7 @@
         android:ellipsize="end"
         android:maxWidth="350dp"
         android:maxLines="2"
-        android:text="Banana"
+        android:text="@string/product_name"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +64,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="K.Lượng: "
+            android:text="K.Lượng: "
             android:textSize="16sp" />
 
         <TextView
@@ -85,7 +87,7 @@
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="50,000"
+            android:text="@string/price"
             android:textColor="@color/Primary_green"
             android:textSize="23sp"
             android:textStyle="bold" />
@@ -150,7 +152,7 @@
             android:id="@+id/textViewProductDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Product Description"
+            android:text="@string/product_description"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/linearLayout2"
@@ -205,7 +207,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:text="Nutritions"
+            android:text="@string/nutritions"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -249,7 +251,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3.5"
-            android:text="Reviews"
+            android:text="@string/reviews"
             android:textSize="18sp"
             android:textStyle="bold" />
 

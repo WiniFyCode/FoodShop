@@ -5,23 +5,23 @@
     android:id="@+id/layoutSignup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Authentication.LoginFragment">
+    tools:context=".Authentication.SignupFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tipCrUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:hint="@string/create_username"
+        android:textColor="@color/black"
+        android:textColorHint="@color/DarkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.85"
         app:startIconDrawable="@drawable/user_icon"
-        android:hint="Create username"
-        android:textColor="@color/black"
-        android:textColorHint="@color/DarkGray"
         app:startIconTint="@color/DarkGray">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -36,9 +36,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="16dp"
-        android:hint="Enter your email"
+        android:hint="@string/enter_your_email"
         android:textColorHint="@color/DarkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,19 +56,69 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tipEnAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/enter_your_address"
+        android:textColorHint="@color/DarkGray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipEnEmail"
+        app:layout_constraintWidth_percent="0.85"
+        app:startIconDrawable="@drawable/address_icon"
+        app:startIconTint="@color/DarkGray">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ipedtEnAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_input_line_below_pg"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tipEnPhoneNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/enter_your_phone_number"
+        android:textColorHint="@color/DarkGray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipEnAddress"
+        app:layout_constraintWidth_percent="0.85"
+        app:startIconDrawable="@drawable/phone_icon"
+        app:startIconTint="@color/DarkGray">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ipedtEnPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_input_line_below_pg"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tipCrPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="16dp"
-        android:hint="Create your password"
+        android:hint="@string/create_your_password"
+        android:inputType="textPassword"
         android:textColorHint="@color/DarkGray"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/DarkGray"
+        app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tipEnEmail"
+        app:layout_constraintTop_toBottomOf="@+id/tipEnPhoneNumber"
         app:layout_constraintWidth_percent="0.85"
         app:startIconDrawable="@drawable/locked_icon"
         app:startIconTint="@color/DarkGray">
@@ -85,9 +135,9 @@
         android:id="@+id/btnSignup"
         android:layout_width="354dp"
         android:layout_height="57dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_bg"
-        android:text="Sign up"
+        android:text="@string/sign_up"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"

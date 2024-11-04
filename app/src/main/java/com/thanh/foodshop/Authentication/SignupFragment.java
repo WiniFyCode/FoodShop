@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class SignupFragment extends Fragment {
 
-    TextInputEditText ipedtCrUsername, ipedtEnEmail, ipedtCrPassword;
+    TextInputEditText ipedtCrUsername, ipedtEnEmail, ipedtCrPassword, ipedtEnAddress, ipedtEnPhoneNumber;
     AppCompatButton btnSignup;
     SharedPreferences sharedPreferences;
     ViewPager2 viewPager2;
@@ -50,6 +50,8 @@ public class SignupFragment extends Fragment {
         ipedtEnEmail = view.findViewById(R.id.ipedtEnEmail);
         ipedtCrPassword = view.findViewById(R.id.ipedtCrPassword);
         btnSignup = view.findViewById(R.id.btnSignup);
+        ipedtEnAddress = view.findViewById(R.id.ipedtEnAddress);
+        ipedtEnPhoneNumber = view.findViewById(R.id.ipedtEnPhoneNumber);
 
         // Ánh xạ ViewPager2 để chuyển qua lại giữa các fragment
         viewPager2 = getActivity().findViewById(R.id.viewPager2);
@@ -67,17 +69,30 @@ public class SignupFragment extends Fragment {
 
     // Hàm xử lý đăng ký
     void signup() {
+        // Lấy thông tin người dùng nhập vào
+        // username: tên đăng nhập
+        // email: email người dùng
+        // password: mật khẩu
+        // address: địa chỉ
+        // phoneNumber: số điện thoại
         String username = ipedtCrUsername.getText().toString().trim();
         String email = ipedtEnEmail.getText().toString().trim();
         String password = ipedtCrPassword.getText().toString().trim();
+        String address = ipedtEnAddress.getText().toString().trim();
+        String phoneNumber = ipedtEnPhoneNumber.getText().toString().trim();
 
         // Kiểm tra thông tin
         if (username.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
+
         } else if (email.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
         } else if (password.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+        } else if (address.isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
+        } else if (phoneNumber.isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
         } else {
 
             Response.Listener<String> thanhcong = new Response.Listener<String>() {
@@ -112,15 +127,16 @@ public class SignupFragment extends Fragment {
 
 
             // Gửi yêu cầu đăng ký lên máy chủ
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.register_php, thanhcong,thatbai)
-            {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.register_php, thanhcong, thatbai) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                    // Gửi dữ liệu đăng ký (username, email, password)
+                    // Gửi dữ liệu đăng ký (username, email, password, address, phoneNumber) lên server
                     HashMap<String, String> params = new HashMap<>();
                     params.put("username", username);
                     params.put("email", email);
                     params.put("password", password);
+                    params.put("address", address);
+                    params.put("phone_number", phoneNumber);
                     return params;
                 }
             };

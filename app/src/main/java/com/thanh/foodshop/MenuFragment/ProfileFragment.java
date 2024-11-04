@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Adapter.ViewPager2Adapter;
@@ -41,7 +42,7 @@ public class ProfileFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager2 viewPager2;
     TextView tvNameUser, tvEmailUser;
-    CircleImageView imgProfile;
+    ShapeableImageView imgProfile;
 
     public static final int PICK_IMAGE_REQUEST = 1;
 
@@ -98,9 +99,9 @@ public class ProfileFragment extends Fragment {
         viewPager2.setAdapter(viewPager2Adapter);
         viewPager2.setSaveEnabled(false);
 
-        tabLayout.addTab(tabLayout.newTab().setText("ACCOUNT"));
-        tabLayout.addTab(tabLayout.newTab().setText("PAYMENT METHOD"));
-        tabLayout.addTab(tabLayout.newTab().setText("HISTORY"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.ACCOUNT)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.PAYMENT_METHOD)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.HISTORY)));
 
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -123,6 +124,8 @@ public class ProfileFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+        tabLayout.setBackgroundResource(R.drawable.profile_top_bg);
 
         return view;
     }

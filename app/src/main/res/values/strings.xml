@@ -1,5 +1,89 @@
 <resources>
-    <string name="app_name">FoodShop</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name" translatable="false">Food Shop</string>
+
+    <!--  Menu  -->
+    <string name="shop">Shop</string>
+    <string name="explore">Explore</string>
+    <string name="cart">Cart</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+
+    <!--  ShopFragment  -->
+    <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="best_seller">Best Seller</string>
+    <string name="see_all">See All</string>
+    <string name="exclusive_offer">Exclusive Offer</string>
+    <string name="all_product">All Product</string>
+    <string name="hello">Hello</string>
+
+    <!--  ExploreFragment  -->
+    <string name="find_products">Find Products</string>
+
+    <!--  CartFragment  -->
+    <string name="total">Total</string>
+    <string name="go_to_checkout">Go To Checkout</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="delivery">Delivery</string>
+    <string name="total_tax">Total Tax</string>
+    <string name="order_summary">Order Summary</string>
+
+    <!--  FavoriteFragment  -->
+    <string name="empty_favorite">Empty Favorite</string>
+    <string name="add_all_to_cart">Add All To Cart</string>
+
+    <!--  ProfileFragment  -->
+    <string name="push_notifications">Push Notifications</string>
+    <string name="set_up_push_notifications">Set up push notifications</string>
+    <string name="account_privacy">Account Privacy</string>
+    <string name="set_up_account_privacy">Set up account privacy</string>
+    <string name="faqs">FAQs</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="log_out">Log Out</string>
+    <string name="log_out_account">Log out account in application</string>
+
+    <!--  Menu  -->
+    <string name="account">Account"</string>
+    <string name="payment_method">Payment Method"</string>
+    <string name="history">History"</string>
+    <string name="my_cart">My Cart</string>
+    <string name="user_name">User Name</string>
+    <string name="email" translatable="false">email</string>
+    <string name="number_phone">Number Phone</string>
+    <string name="product_name">Product Name</string>
+    <string name="price">Price</string>
+    <string name="product_description">Product Description</string>
+    <string name="description">Description</string>
+    <string name="reviews">Reviews</string>
+    <string name="nutritions">Nutritions</string>
+    <string name="enter_your_username">Enter your username</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot password ?</string>
+    <string name="login">Login</string>
+    <string name="or_login_with_social_account">Or login with social account</string>
+    <string name="google" translatable="false">Google</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="create_username">Create username</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="create_your_password">Create your password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="count">Count</string>
+    <string name="category_name">Category Name</string>
+    <string name="weigth" translatable="false">Weigth</string>
+    <string name="LOGIN">LOGIN</string>
+    <string name="REGISTER">REGISTER</string>
+    <string name="ACCOUNT">ACCOUNT</string>
+    <string name="PAYMENT_METHOD">PAYMENT METHOD</string>
+    <string name="HISTORY">HISTORY</string>
+    <string name="search_what_you_need">Search what you need &#8230;</string>
+    <string name="enter_your_phone_number">Enter your phone number</string>
+    <string name="enter_your_address">Enter your address</string>
+    <string name="checkout">Checkout</string>
+    <string name="BACK_TO_HOME">BACK TO HOME</string>
+    <string name="title_order_success">Your Order has been \n accepted</string>
+    <string name="body_order_success">Your items has been placed and is on \n it’s way to being processed</string>
+    <string name="track_order">Track order</string>
+    <string name="enter_your_name">Enter your name</string>
+
 </resources>

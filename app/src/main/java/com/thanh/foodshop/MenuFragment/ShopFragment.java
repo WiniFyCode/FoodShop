@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,24 @@ import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.thanh.foodshop.Activity.ProductDetailActivity;
 import com.thanh.foodshop.Activity.SearchActivity;
 import com.thanh.foodshop.Adapter.ProductAdapter;
+import com.thanh.foodshop.Authentication.LoginFragment;
 import com.thanh.foodshop.Class.SeeAll;
 
 import com.thanh.foodshop.Model.Product;
@@ -40,6 +47,8 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShopFragment extends Fragment {
 
@@ -60,7 +69,12 @@ public class ShopFragment extends Fragment {
     TextView tvSeeAllExclusive, tvSeeAllBestSelling;
 
     // search view
-    SearchView searchView;
+    ImageView searchView;
+
+    AppCompatButton btnAddToCart;
+
+    // Shimmer
+//    ShimmerFrameLayout shimmerFrameLayout;
 
     @Nullable
     @Override
@@ -91,6 +105,11 @@ public class ShopFragment extends Fragment {
 
         // Thiết lập RecyclerView
         rcvExclusiveOffer.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+
+        // Load shimmer effect
+//        shimmerFrameLayout = view.findViewById(R.id.shimmer);
+//        shimmerFrameLayout.startShimmer();
+
         rcvExclusiveOffer.setAdapter(exclusiveAdapter);
 
         rcvBestSelling.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
@@ -100,7 +119,7 @@ public class ShopFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
         tvNameUser = view.findViewById(R.id.tvUsername);
-        tvNameUser.setText("Hello, " + username);
+        tvNameUser.setText(getResources().getString(R.string.hello) + ", " + username + " !");
 
         // Click xem thêm
         tvSeeAllExclusive = view.findViewById(R.id.tvSellAllExclusive);
@@ -134,8 +153,27 @@ public class ShopFragment extends Fragment {
             }
         });
 
+        btnAddToCart = view.findViewById(R.id.btnAddToCart);
+        // chua lam xong
+
+
         // Gọi loadData() ở đây
         loadSilder();
+
+//        neu muốn sài shimmer
+        // Sử dụng Handler để trì hoãn hiển thị dữ liệu sau khoảng thời gian mong muốn (ví dụ: 2 giây)
+        // new Handler(Looper.getMainLooper()).postDelayed(() -> {
+        //     // Gọi phương thức tải dữ liệu sau 2 giây (2000 ms)
+        //     loadExclusive();
+        //     loadBestSelling();
+
+        //     // Dừng shimmer và hiển thị dữ liệu khi hoàn tất
+        //     shimmerFrameLayout.stopShimmer();
+        //     shimmerFrameLayout.setVisibility(View.GONE);
+        //     rcvExclusiveOffer.setVisibility(View.VISIBLE);
+        // }, 2000);
+
+        // nếu sài shimmer thì comment chỗ này
         if (exclusiveData.isEmpty()) {
             loadExclusive();
         }
@@ -174,16 +212,23 @@ public class ShopFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
 
-        viewFlipper.setFlipInterval(2500);
+        viewFlipper.setFlipInterval(2000);
         viewFlipper.setAutoStart(true);
     }
 
     private void loadExclusive() {
+
+        // Bắt đầu shimmer
+//        shimmerFrameLayout.startShimmer();
+//        shimmerFrameLayout.setVisibility(View.VISIBLE);
+//        rcvExclusiveOffer.setVisibility(View.GONE); // Ẩn RecyclerView khi load
+
         // B3:
         exclusiveData.clear();
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -192,7 +237,6 @@ public class ShopFragment extends Fragment {
                         String name = new String(food.getString("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String description = new String(food.getString("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String price = new String(food.getString("price").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-
 
                         exclusiveData.add(new Product(
                                 food.getInt("id"),
@@ -204,12 +248,25 @@ public class ShopFragment extends Fragment {
                         ));
                     }
                     exclusiveAdapter.notifyDataSetChanged();
+
+                    // Tắt shimmer khi dữ liệu đã tải xong
+//                    shimmerFrameLayout.stopShimmer();
+//                    shimmerFrameLayout.setVisibility(View.GONE);
+//                    rcvExclusiveOffer.setVisibility(View.VISIBLE);
+
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "LOI" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    // Tắt shimmer trong trường hợp lỗi
+//                    shimmerFrameLayout.stopShimmer();
+//                    shimmerFrameLayout.setVisibility(View.GONE);
+//                    rcvExclusiveOffer.setVisibility(View.VISIBLE);
+
                     throw new RuntimeException(e);
                 }
             }
         };
+
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -297,4 +354,5 @@ public class ShopFragment extends Fragment {
     //         bestSellingAdapter.setData(filteredBestSellingData);
     //     }
     // }
+
 }

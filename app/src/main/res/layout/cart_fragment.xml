@@ -13,24 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnBack"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/back"
-            android:backgroundTint="@color/Primary_yellow"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="My Cart"
+            android:text="@string/my_cart"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,6 +29,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="15dp"
         android:id="@+id/rcvCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -49,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:text="Chi tiết đơn hàng"
+        android:text="@string/order_summary"
         android:textColor="@color/DarkBlue"
         android:textSize="19sp"
         android:textStyle="bold" />
@@ -58,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/Wheat">
+        android:background="@drawable/order_summary">
 
         <TextView
             android:id="@+id/textView3"
@@ -66,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Subtotal: $"
+            android:text="@string/subtotal"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -76,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Delivery: $"
+            android:text="@string/delivery"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -86,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Total tax: $"
+            android:text="@string/total_tax"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -137,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Total: $"
+            android:text="@string/total"
             android:textSize="18sp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -164,9 +154,10 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="15dp"
+        android:layout_marginBottom="67dp"
         android:background="@drawable/add_to_cart_bg"
         android:backgroundTint="@color/Primary_orange"
-        android:text="Go to Checkout"
+        android:text="@string/go_to_checkout"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="25sp"

@@ -1,5 +1,6 @@
 package com.thanh.foodshop.Activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;

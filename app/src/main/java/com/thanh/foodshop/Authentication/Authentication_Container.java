@@ -39,8 +39,8 @@ public class Authentication_Container extends AppCompatActivity {
         ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle(), fragmentlist);
         viewPager2.setAdapter(viewPager2Adapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("LOGIN"));
-        tabLayout.addTab(tabLayout.newTab().setText("REGISTER"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.LOGIN)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.REGISTER)));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

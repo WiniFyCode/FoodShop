@@ -12,9 +12,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
-        android:hint="Enter your username"
+        android:hint="@string/enter_your_username"
         android:textColorHint="@color/DarkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,9 +35,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="16dp"
-        android:hint="Enter your password"
+        android:hint="@string/enter_your_password"
         android:inputType="textPassword"
         android:textColorHint="@color/DarkGray"
         app:endIconMode="password_toggle"
@@ -54,7 +54,7 @@
             android:id="@+id/ipedtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_input_line_below_pg"/>
+            android:background="@drawable/text_input_line_below_pg" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
-        android:text="Forgot password ?"
+        android:text="@string/forgot_password"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tipPassword" />
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:button="@drawable/remeber_me_bg"
-        android:text="Remember me"
+        android:text="@string/remember_me"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvForgotPassword"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
         android:layout_marginTop="59dp"
         android:background="@drawable/button_bg"
         android:elevation="8dp"
-        android:text="Login"
+        android:text="@string/login"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -105,7 +105,7 @@
         android:drawableEnd="@drawable/line"
         android:drawablePadding="10dp"
         android:gravity="center_horizontal"
-        android:text="Or login with social account"
+        android:text="@string/or_login_with_social_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
@@ -133,7 +133,7 @@
             android:drawablePadding="20dp"
             android:gravity="center_vertical"
             android:paddingStart="35dp"
-            android:text="Google"
+            android:text="@string/google"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp" />
@@ -150,7 +150,7 @@
             android:drawablePadding="20dp"
             android:gravity="center_vertical"
             android:paddingStart="28dp"
-            android:text="Facebook"
+            android:text="@string/facebook"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp" />

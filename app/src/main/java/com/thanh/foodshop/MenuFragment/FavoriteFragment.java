@@ -166,7 +166,7 @@ public class FavoriteFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
-                Log.d("FavoriteFragment", "user_id: " + String.valueOf(BottomNavigationActivity.USER.id));
+                Log.d("FavoriteFragment", "user_id: " + BottomNavigationActivity.USER.id);
                 return params;
             }
         };

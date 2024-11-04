@@ -5,13 +5,17 @@
     android:id="@+id/layoutAuthenticationContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/profile_top_bg"
     android:orientation="vertical"
+    android:paddingTop="30dp"
     tools:context=".Authentication.Authentication_Container">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/halfscreenabove"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/logo_transparent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
@@ -19,11 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
-        app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorHeight="5dp"
-        app:tabIndicatorColor="@color/Primary_green"
-        app:tabMode="fixed"
+        android:background="@drawable/profile_top_bg"
         app:tabIndicator="@drawable/tab_indicator"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicatorColor="@color/Primary_green"
+        app:tabIndicatorHeight="5dp"
+        app:tabMode="fixed"
         app:tabSelectedTextColor="@color/holo_blue_light" />
 
     <androidx.viewpager2.widget.ViewPager2
@@ -34,7 +39,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
         android:background="@color/GhostWhite" />
 
 </RelativeLayout>

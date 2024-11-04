@@ -266,9 +266,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             return;
         }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php, new Response.Listener<String>() {
+        Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
@@ -279,12 +277,16 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Toast.makeText(ProductDetailActivity.this, response, Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new Response.ErrorListener() {
+        };
+
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(ProductDetailActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }) {
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php, thanhcong, thatbai) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -296,6 +298,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         };
 
+        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
         requestQueue.add(stringRequest);
     }
 

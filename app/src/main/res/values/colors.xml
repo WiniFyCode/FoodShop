@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--  Shimmer Effect -->
+    <color name="shimmer_base">#bfbfbf</color>
+
     <!-- Primary -->
     <color name="Primary_green">#2ECC71</color>
     <color name="Primary_yellow">#FECC4C</color>
@@ -15,8 +18,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Gainsboro">#DCDCDC</color>
     <color name="LightGrey">#D3D3D3</color>
-    <color name="Silver">#C0C0C0</color>
-    <color name="silver">#F2F3F2</color>
+    <color name="Silver">#CACACA</color>
+    <color name="silver">#F2F2F2</color>
     <color name="DarkGray">#A9A9A9</color>
     <color name="Gray">#808080</color>
     <color name="DimGray">#696969</color>

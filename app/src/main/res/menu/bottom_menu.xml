@@ -4,22 +4,22 @@
     <item
         android:id="@+id/shop"
         android:icon="@drawable/shop"
-        android:title="Shop" />
+        android:title="@string/shop" />
     <item
         android:id="@+id/explore"
         android:icon="@drawable/search"
-        android:title="Explore" />
+        android:title="@string/explore" />
     <item
         android:id="@+id/cart"
         android:icon="@drawable/cart"
-        android:title="Cart" />
+        android:title="@string/cart" />
     <item
         android:id="@+id/favorite"
         android:icon="@drawable/tym"
-        android:title="Favorite" />
+        android:title="@string/favorite" />
     <item
         android:id="@+id/profile"
         android:icon="@drawable/profile"
-        android:title="Profile"/>
+        android:title="@string/profile"/>
 
 </menu>

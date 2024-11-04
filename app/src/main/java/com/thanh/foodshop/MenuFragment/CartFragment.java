@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,7 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,22 +31,20 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.thanh.foodshop.Activity.BottomNavigationActivity;
 import com.thanh.foodshop.Activity.CheckOutActivity;
+import com.thanh.foodshop.Activity.ProductDetailActivity;
 import com.thanh.foodshop.Adapter.CartAdapter;
-import com.thanh.foodshop.Authentication.LoginFragment;
 import com.thanh.foodshop.Model.Cart;
-import com.thanh.foodshop.Model.Product;
-import com.thanh.foodshop.Model.User;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CartFragment extends Fragment {
@@ -54,10 +56,12 @@ public class CartFragment extends Fragment {
     TextView tvSubtotal, tvDeliveryFee, tvTotalTax;
     AppCompatButton btnCheckout;
 
-    public static double totalPrice = 0;
-    private double subtotal = 0;
-    private double delivery = 2; // Phí giao hàng cố định
-    private double tax = 0.1; // 10% thuế
+    int user_id;
+
+    double totalPrice = 0;
+    double subtotal = 0;
+    double delivery = 0;
+    double tax = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,55 +71,65 @@ public class CartFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        rcvCart = view.findViewById(R.id.rcvCart);
         tvTotal = view.findViewById(R.id.tvTotal);
 
         tvSubtotal = view.findViewById(R.id.tvSubtotal);
         tvDeliveryFee = view.findViewById(R.id.tvDelivery);
         tvTotalTax = view.findViewById(R.id.tvTotalTax);
 
-        totalPrice = 0;
-
-        tvTotal.setText(totalPrice + "VND");
-        tvSubtotal.setText(totalPrice + "VND");
-        tvDeliveryFee.setText(totalPrice + "VND");
-        tvTotalTax.setText(totalPrice + "VND");
-
+        rcvCart = view.findViewById(R.id.rcvCart);
         cartItems = new ArrayList<>();
-        cartAdapter = new CartAdapter(cartItems, getContext());
-        rcvCart.setAdapter(cartAdapter);
+        cartAdapter = new CartAdapter(cartItems, getContext(), this);
         rcvCart.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvCart.setAdapter(cartAdapter);
 
-        loadCartItems();
+        RecyclerView.ItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        rcvCart.addItemDecoration(divider);
+
+        if (BottomNavigationActivity.USER != null) {
+            user_id = BottomNavigationActivity.USER.id;
+        } else {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
+            user_id = sharedPreferences.getInt("user_id", -1); // -1 nếu không tìm thấy user_id
+        }
+        if (user_id == -1) {
+            Toast.makeText(getContext(), "Không tìm thấy user_id. Hãy đăng nhập lại.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        loadCartItems(user_id);
 
         btnCheckout = view.findViewById(R.id.btnGotoCheckout);
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                totalPrice = 0;
+                List<Integer> selectedCartIds = new ArrayList<>();
+
+                // Kiểm tra các sản phẩm được chọn
                 for (Cart cart : cartItems) {
-                    if (cart.quantity > 0) {
-                        totalPrice = cart.total_price * cart.quantity;
-                        Intent intent = new Intent(getContext(), CheckOutActivity.class);
-                        intent.putExtra("totalPrice", totalPrice);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_SHORT).show();
+                    if (cart.selected) {
+                        selectedCartIds.add(cart.id);
+                        Log.d("CartFragment", "Selected Cart ID: " + cart.id + ", Price: " + cart.price);
                     }
                 }
-                CartFragment.tvTotal.setText(totalPrice + "VND");
+
+                // Kiểm tra nếu có sản phẩm được chọn , nếu có thì chuyển sang CheckOutActivity
+                if (!selectedCartIds.isEmpty()) {
+                    Intent intent = new Intent(getContext(), CheckOutActivity.class);
+                    intent.putIntegerArrayListExtra("selected_cart_ids", new ArrayList<>(selectedCartIds));// lay id san pham duoc chon gui qua CheckOutActivity de xoa san pham trong gio hang
+                    intent.putExtra("total_price", totalPrice); // Sử dụng totalPrice đã được tính toán
+                    intent.putExtra("user_id", user_id);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_SHORT).show();
+                    Log.d("CartFragment", "Không có sản phẩm được chọn");
+                }
             }
         });
-
     }
 
-    private void loadCartItems() {
+    private void loadCartItems(int userId) {
         cartItems.clear();
-
-        if (BottomNavigationActivity.USER == null) {
-            return;
-        }
 
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
@@ -124,7 +138,7 @@ public class CartFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject cart = jsonArray.getJSONObject(i);
-                        cartItems.add(new Cart(
+                        Cart cartItem = new Cart(
                                 cart.getInt("id"),
                                 cart.getInt("product_id"),
                                 cart.getInt("user_id"),
@@ -133,12 +147,23 @@ public class CartFragment extends Fragment {
                                 cart.getInt("quantity"),
                                 cart.getString("image_url"),
                                 cart.getDouble("total_price")
-                        ));
-                        cartAdapter.notifyDataSetChanged();
-                        updateTotal();
+                        );
+                        cartItems.add(cartItem);
+                        Log.d("CartFragment", "Added item: " + cartItem.name);
                     }
+
+                    cartAdapter.notifyDataSetChanged();
+                    updateTotal();
+
+                    if (cartItems.isEmpty()) {
+                        Log.d("CartFragment", "Giỏ hàng trống sau khi tải");
+                    } else {
+                        Log.d("CartFragment", "Giỏ hàng có " + cartItems.size() + " items");
+                    }
+
                 } catch (Exception e) {
-                    Log.d("CartFragment", "Lỗi: " + e.getMessage());
+                    Log.e("CartFragment", "Error parsing JSON: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         };
@@ -146,7 +171,7 @@ public class CartFragment extends Fragment {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("CartFragment", "Không có dữ liệu" + BottomNavigationActivity.USER.id);
+                Log.e("CartFragment", "Volley Error: " + error.toString());
             }
         };
 
@@ -154,7 +179,7 @@ public class CartFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<>();
-                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
+                params.put("user_id", String.valueOf(CartFragment.this.user_id));
                 return params;
             }
         };
@@ -163,19 +188,33 @@ public class CartFragment extends Fragment {
     }
 
     private void updateTotal() {
-        subtotal = 0;
-        for (Cart item : CartFragment.cartItems) {
-            if (item.selected) {
-                subtotal += item.price * item.quantity;
+        double subtotal = 0;
+
+        // Chỉ tính tổng tiền cho các sản phẩm được chọn
+        for (Cart cart : cartItems) {
+            if (cart.selected) {
+                subtotal += cart.price * cart.quantity;
             }
         }
 
-        double totalTax = subtotal * tax;
-        double total = subtotal + delivery + totalTax;
+        double deliveryFee = subtotal * 0.01; // 1% phí giao hàng
+        double tax = (subtotal + deliveryFee) * 0.04; // 4% VAT
+        double total = subtotal + deliveryFee + tax;
 
-        tvSubtotal.setText(String.format("$%.2f", subtotal));
-        tvDeliveryFee.setText(String.format("$%.2f", delivery));
-        tvTotalTax.setText(String.format("$%.2f", totalTax));
-        tvTotal.setText(String.format("$%.2f", total));
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        tvSubtotal.setText(formatter.format(subtotal));
+        tvDeliveryFee.setText(formatter.format(deliveryFee));
+        tvTotalTax.setText(formatter.format(tax));
+        tvTotal.setText(formatter.format(total));
+
+        this.totalPrice = total;
+
+        // Cập nhật trạng thái nút Checkout
+        btnCheckout.setEnabled(total > 0);
+    }
+
+    // Thêm phương thức này để CartAdapter có thể gọi
+    public void updateTotalFromAdapter() {
+        updateTotal();
     }
 }

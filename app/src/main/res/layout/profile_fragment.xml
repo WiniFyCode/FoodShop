@@ -6,21 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="15dp"
-    android:background="@color/Snow"
     tools:context=".MenuFragment.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="313dp"
+        android:background="@drawable/profile_top_bg"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tvProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:text="Profile"
+            android:text="@string/profile"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,40 +32,50 @@
             android:layout_height="30dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/bell"
+            android:background="@drawable/bell_ring"
+            android:backgroundTint="@color/Primary_yellow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/profile_icon"
-            app:civ_border_color="@color/holo_yellow_light"
-            app:civ_border_width="2dp"
+            android:layout_width="112dp"
+            android:layout_height="112dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/profile_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvProfile" >
+            app:layout_constraintTop_toBottomOf="@+id/tvProfile"
+            app:shapeAppearanceOverlay="@style/roundedImageView" />
 
-        </de.hdodenhof.circleimageview.CircleImageView>
+        <!--        <de.hdodenhof.circleimageview.CircleImageView-->
+        <!--            android:id="@+id/profile_image"-->
+        <!--            android:layout_width="96dp"-->
+        <!--            android:layout_height="96dp"-->
+        <!--            android:layout_marginTop="40dp"-->
+        <!--            android:background="@drawable/profile_icon"-->
+        <!--            app:civ_border_color="@color/holo_yellow_light"-->
+        <!--            app:civ_border_width="2dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/tvProfile" />-->
 
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:layout_width="96dp"-->
-<!--            android:layout_height="96dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/profile_image"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/profile_image"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/profile_image"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            app:lottie_rawRes="@raw/profile" />-->
+        <!--        <com.airbnb.lottie.LottieAnimationView-->
+        <!--            android:layout_width="96dp"-->
+        <!--            android:layout_height="96dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
+        <!--            app:layout_constraintEnd_toEndOf="@+id/profile_image"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/profile_image"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/profile_image"-->
+        <!--            app:lottie_autoPlay="true"-->
+        <!--            app:lottie_rawRes="@raw/profile" />-->
 
         <TextView
             android:id="@+id/tvNameUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="name user"
+            android:layout_marginTop="17dp"
+            android:text="@string/user_name"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/profile_image"
@@ -77,7 +86,7 @@
             android:id="@+id/tvEmailUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email@gmail.com"
+            android:text="@string/email"
             android:textColor="@color/holo_gray_light"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/tvNameUser"
