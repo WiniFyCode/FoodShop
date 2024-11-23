@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp"
+    android:orientation="vertical"
+    tools:context=".Class.SeeAll">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="9dp"
+        android:gravity="center_horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/back"
+            android:backgroundTint="@color/Primary_yellow" />
+
+        <TextView
+            android:layout_weight="8"
+            android:id="@+id/tvSeeAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center|top"
+            android:maxLines="2"
+            android:text="@string/all_product"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tvSortBy"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/filter"
+            android:backgroundTint="@color/Primary_yellow" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvSeeAll"
+        android:layout_width="match_parent"
+        android:layout_height="750dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="57dp" />
+
+
+</LinearLayout>

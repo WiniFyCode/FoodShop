@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
+    android:orientation="vertical"
+    tools:context=".MenuProfile.AccountFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutNotification"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/profile_bg">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBell"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/bell_ring"
+            android:backgroundTint="@color/Primary_yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/push_notifications"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/btnBell"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/set_up_push_notifications"
+            android:textColor="@color/holo_gray_light"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnBell"
+            app:layout_constraintStart_toEndOf="@+id/btnBell"
+            app:layout_constraintTop_toBottomOf="@+id/tvNotification" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/profile_bg">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPrivacy"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/shield"
+            android:backgroundTint="@color/Primary_yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPrivacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/account_privacy"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/btnPrivacy"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/set_up_account_privacy"
+            android:textColor="@color/holo_gray_light"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnPrivacy"
+            app:layout_constraintStart_toEndOf="@+id/btnPrivacy"
+            app:layout_constraintTop_toBottomOf="@+id/tvPrivacy" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutFaq"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/profile_bg">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnFaq"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/faq"
+            android:backgroundTint="@color/Primary_yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFaq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/faqs"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/btnFaq"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/frequently_asked_questions"
+            android:textColor="@color/holo_gray_light"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnFaq"
+            app:layout_constraintStart_toEndOf="@+id/btnFaq"
+            app:layout_constraintTop_toBottomOf="@+id/tvFaq" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutLogout"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/profile_bg">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogout"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/log_out"
+            android:backgroundTint="@color/Primary_yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/log_out"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/btnLogout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/log_out_account"
+            android:textColor="@color/holo_gray_light"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnLogout"
+            app:layout_constraintStart_toEndOf="@+id/btnLogout"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
