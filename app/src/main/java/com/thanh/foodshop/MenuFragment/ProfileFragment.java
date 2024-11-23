@@ -99,6 +99,7 @@ public class ProfileFragment extends Fragment {
         viewPager2.setAdapter(viewPager2Adapter);
         viewPager2.setSaveEnabled(false);
 
+        tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.ACCOUNT)));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.PAYMENT_METHOD)));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.HISTORY)));

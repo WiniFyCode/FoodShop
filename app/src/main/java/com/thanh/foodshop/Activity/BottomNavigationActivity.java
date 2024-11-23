@@ -1,9 +1,15 @@
 package com.thanh.foodshop.Activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -12,7 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.thanh.foodshop.MenuFragment.CartFragment;
@@ -60,6 +66,9 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
         LoadFragment(shopFragment);
 
+// Cập nhật badge khi ứng dụng khởi động
+        updateCartBadge(CART.size());
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -68,7 +77,6 @@ public class BottomNavigationActivity extends AppCompatActivity {
                     case R.id.shop:
                         LoadFragment(shopFragment);
                         break;
-
                     case R.id.explore:
                         LoadFragment(exploreFragment);
                         break;
@@ -91,7 +99,26 @@ public class BottomNavigationActivity extends AppCompatActivity {
         });
     }
 
+    // Cập nhật badge khi có sự thay đổi trong giỏ hàng
+    public void updateCartBadge(int itemCount) {
+        BadgeDrawable badge = bottomNavigationView.getOrCreateBadge(R.id.cart);
+        badge.setVisible(true);
+        badge.setNumber(itemCount);
+        badge.setMaxCharacterCount(3);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cập nhật badge khi quay lại màn hình chính
+        updateCartBadge(CART.size());
+    }
+
     public void LoadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).commit();
+        getSupportFragmentManager().beginTransaction()
+//                .setCustomAnimations(R.anim.bounce, R.anim.bounce, R.anim.bounce, R.anim.bounce)
+                .replace(R.id.frameLayout, fragment)
+                .commit();
     }
 }

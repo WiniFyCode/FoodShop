@@ -161,6 +161,9 @@ public class CartFragment extends Fragment {
                         Log.d("CartFragment", "Giỏ hàng có " + cartItems.size() + " items");
                     }
 
+                    // cap nhat badge cart ( hien thi so luong san pham co trong gio hang )
+                    ((BottomNavigationActivity) getActivity()).updateCartBadge(cartItems.size());
+
                 } catch (Exception e) {
                     Log.e("CartFragment", "Error parsing JSON: " + e.getMessage());
                     e.printStackTrace();

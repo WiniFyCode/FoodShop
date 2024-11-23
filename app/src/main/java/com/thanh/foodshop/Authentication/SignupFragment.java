@@ -69,12 +69,6 @@ public class SignupFragment extends Fragment {
 
     // Hàm xử lý đăng ký
     void signup() {
-        // Lấy thông tin người dùng nhập vào
-        // username: tên đăng nhập
-        // email: email người dùng
-        // password: mật khẩu
-        // address: địa chỉ
-        // phoneNumber: số điện thoại
         String username = ipedtCrUsername.getText().toString().trim();
         String email = ipedtEnEmail.getText().toString().trim();
         String password = ipedtCrPassword.getText().toString().trim();
@@ -84,7 +78,6 @@ public class SignupFragment extends Fragment {
         // Kiểm tra thông tin
         if (username.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
-
         } else if (email.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
         } else if (password.isEmpty()) {

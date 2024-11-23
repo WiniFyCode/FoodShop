@@ -125,12 +125,12 @@ public class ExploreFragment extends Fragment {
         } else {
             ArrayList<Categories> filteredCategories = new ArrayList<>();
             // Bo di cac ky tu dac biet
-            String queryNoMark = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+            String chuoiKoDau = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
             // Normalizer.NFD là một phương thức trong Java để chuyển chuỗi văn bản sang dạng Unicode Normalization Form D (NFD)
             for (Categories category : categoriesData) {
                 String categoryName = category.getName().toLowerCase();
-                String categoryNameNoMark = Normalizer.normalize(categoryName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-                if (categoryNameNoMark.contains(queryNoMark)) {
+                String categoryKoDau = Normalizer.normalize(categoryName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+                if (categoryKoDau.contains(chuoiKoDau)) {
                     filteredCategories.add(category);
                 }
             }

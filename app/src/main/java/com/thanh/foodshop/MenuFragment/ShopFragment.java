@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +67,7 @@ public class ShopFragment extends Fragment {
 
     // Ten user
     TextView tvNameUser;
-    TextView tvSeeAllExclusive, tvSeeAllBestSelling;
+    TextView tvAddress, tvSeeAllExclusive, tvSeeAllBestSelling;
 
     // search view
     ImageView searchView;
@@ -81,6 +82,7 @@ public class ShopFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.shop_fragment, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -118,8 +120,16 @@ public class ShopFragment extends Fragment {
         // Lay ten user
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
+        String address = sharedPreferences.getString("address", "");
         tvNameUser = view.findViewById(R.id.tvUsername);
         tvNameUser.setText(getResources().getString(R.string.hello) + ", " + username + " !");
+        tvAddress = view.findViewById(R.id.tvAddress);
+        if (address.length() > 20) {
+            tvAddress.setText(address.substring(0, 20) + "...");
+        } else {
+            tvAddress.setText(address);
+        }
+
 
         // Click xem thêm
         tvSeeAllExclusive = view.findViewById(R.id.tvSellAllExclusive);
@@ -213,6 +223,7 @@ public class ShopFragment extends Fragment {
         requestQueue.add(stringRequest);
 
         viewFlipper.setFlipInterval(2000);
+        viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce));
         viewFlipper.setAutoStart(true);
     }
 
@@ -244,7 +255,11 @@ public class ShopFragment extends Fragment {
                                 description,
                                 price,
                                 food.getString("weight"),
-                                food.getString("image_url")
+                                food.getString("image_url"),
+                                food.getInt("stock_quantity"),
+                                food.getString("last_updated"),
+                                food.getString("expiry_date"),
+                                food.getInt("category_id")
                         ));
                     }
                     exclusiveAdapter.notifyDataSetChanged();
@@ -302,7 +317,11 @@ public class ShopFragment extends Fragment {
                                 description,
                                 price,
                                 food.getString("weight"),
-                                food.getString("image_url")
+                                food.getString("image_url"),
+                                food.getInt("stock_quantity"),
+                                food.getString("last_updated"),
+                                food.getString("expiry_date"),
+                                food.getInt("category_id")
                         ));
                     }
                     bestSellingAdapter.notifyDataSetChanged(); // dat o day de dung
@@ -325,34 +344,4 @@ public class ShopFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
-
-    // private void filterData(String query) {
-    //     if (query.isEmpty()) {
-    //         exclusiveAdapter.setData(exclusiveData);
-    //         bestSellingAdapter.setData(bestSellingData);
-    //     } else {
-    //         ArrayList<Product> filteredExclusiveData = new ArrayList<>();
-    //         ArrayList<Product> filteredBestSellingData = new ArrayList<>();
-
-    //         String queryNoMark = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-
-    //         for (Product product : exclusiveData) {
-    //             String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-    //             if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
-    //                 filteredExclusiveData.add(product);
-    //             }
-    //         }
-
-    //         for (Product product : bestSellingData) {
-    //             String nameNoMark = Normalizer.normalize(product.getName(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-    //             if (nameNoMark.toLowerCase().contains(queryNoMark.toLowerCase())) {
-    //                 filteredBestSellingData.add(product);
-    //             }
-    //         }
-
-    //         exclusiveAdapter.setData(filteredExclusiveData);
-    //         bestSellingAdapter.setData(filteredBestSellingData);
-    //     }
-    // }
-
 }

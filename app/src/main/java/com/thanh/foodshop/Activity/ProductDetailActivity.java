@@ -1,7 +1,8 @@
 package com.thanh.foodshop.Activity;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,7 +32,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Authentication.LoginFragment;
-import com.thanh.foodshop.Class.FavoriteManager;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -51,7 +51,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     int productId = -1;
     private Product product;
 
-    public boolean isFavorite = false;
+    boolean isFavorited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String price = intent.getStringExtra("price");
         String weight = intent.getStringExtra("weight");
         String image = intent.getStringExtra("image_url");
+        int stock_quantity = intent.getIntExtra("stock_quantity", 0);
         productId = intent.getIntExtra("product_id", 0);
         Log.e("ProdID", productId + " dhhsdhds");
 
@@ -93,7 +94,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Thiết lập dữ liệu
         tvNameProduct.setText(name);
-        setupPrice(price);
+        setupPrice(price, stock_quantity);
         tvDescription.setText(description);
         if (weight == null || weight.equals("null")) {
             tvWeight.setText("...");
@@ -102,7 +103,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
         loadImage(image);
 
+        // Lấy đối tượng Product từ intent
+        //Intent có thể chứa các tham số là các đối tượng Serializable
+        //Do đó, ta có thể lấy đối tượng Product từ intent
+        //và gán nó cho biến product
         product = (Product) intent.getSerializableExtra("product");
+
+        // Kiểm tra xem sản phẩm có trong danh sách yêu thích không
+        checkIfFavorited();
 
         // back lại
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +148,19 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        btnMoreDes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tvDescription.getVisibility() == View.VISIBLE) {
+                    tvDescription.setVisibility(View.GONE);
+                    btnMoreDes.setBackgroundResource(R.drawable.arrow_forward);
+                } else {
+                    tvDescription.setVisibility(View.VISIBLE);
+                    btnMoreDes.setBackgroundResource(R.drawable.arrow_bottom_down);
+                }
+            }
+        });
+
         // Thêm TextWatcher để theo dõi thay đổi trong edtQuantity
         edtQuantity.addTextChangedListener(new TextWatcher() {
             @Override
@@ -151,9 +172,14 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (!s.toString().isEmpty()) {
                     try {
                         quantity = Integer.parseInt(s.toString());
-                        if (quantity < 0) {
-                            quantity = 0;
-                            edtQuantity.setText("0");
+                        if (quantity > stock_quantity) {
+                            quantity = stock_quantity;
+                            edtQuantity.setText(stock_quantity + "");
+                            edtQuantity.setSelection(edtQuantity.getText().length());
+                        } else if (quantity < 1) {
+                            quantity = 1;
+                            edtQuantity.setText("1");
+                            edtQuantity.setSelection(edtQuantity.getText().length());
                         }
                     } catch (NumberFormatException e) {
                         // Nếu không thể chuyển đổi, thiết lập quantity về 0
@@ -178,10 +204,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         imgFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                isFavorite = !isFavorite;
-                updateFavoriteStatus();
-                Toast.makeText(ProductDetailActivity.this, isFavorite ? "Đã thêm vào danh sách yêu thích" : "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                if (isFavorited) {
+                    deleteFromFavorite();
+                } else {
+                    addToFavorite();
+                }
             }
         });
     }
@@ -226,25 +254,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void setupPrice(String price) {
-        // Kiểm tra nếu giá bằng 0
-        if (Integer.parseInt(price.replace(",", "")) == 0) {
+    private void setupPrice(String price, int stock_quantity) {
+        // Kiểm tra nếu stock_quantity bằng 0
+        if (stock_quantity == 0) {
             tvPrice.setText("Tạm hết hàng");
             tvPrice.setTextColor(getResources().getColor(R.color.Red));
             tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            btnAddToCart.setEnabled(false);
+            btnAddToCart.setAlpha(0.3f);
         } else {
-            // Sử dụng SpannableString để định dạng màu
             String formattedPrice = price + " đ";
             SpannableString spannable = new SpannableString(formattedPrice);
-
-            // Đặt màu cho phần giá (Primary_green)
             spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.Primary_green)), 0, price.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            // Đặt màu đen cho ký hiệu "đ"
             spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.Black)), price.length(), formattedPrice.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            // Thiết lập giá trị cho TextView
             tvPrice.setText(spannable);
+            btnAddToCart.setEnabled(true);
+            btnAddToCart.setAlpha(1f);
         }
     }
 
@@ -257,24 +282,16 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-    private Product getProductDetails() {
-        return product;
-    }
-
-    private void addToFavorite() {
-        if (BottomNavigationActivity.USER == null) {
-            return;
-        }
-
+    private void checkIfFavorited() {
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("success")) {
-                    FavoriteManager.addFavorite(product);
-                    isFavorite = true;
-                    updateFavoriteStatus();
+                if (response.equals("favorited")) {
+                    isFavorited = true;
+                    imgFavorite.setImageResource(R.drawable.favorite_red);
                 } else {
-                    Toast.makeText(ProductDetailActivity.this, response, Toast.LENGTH_SHORT).show();
+                    isFavorited = false;
+                    imgFavorite.setImageResource(R.drawable.favorite_white);
                 }
             }
         };
@@ -282,18 +299,16 @@ public class ProductDetailActivity extends AppCompatActivity {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ProductDetailActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this, "Kết nối thất bại", Toast.LENGTH_SHORT).show();
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php, thanhcong, thatbai) {
-            @Nullable
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.check_favorite_php, thanhcong, thatbai) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
-                params.put("product_id", String.valueOf(product.getId()));
-
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
+                params.put("product_id", String.valueOf(productId));
                 return params;
             }
         };
@@ -302,61 +317,75 @@ public class ProductDetailActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void removeFromFavorite() {
-        if (BottomNavigationActivity.USER == null) {
-            return;
-        }
-
-        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.delete_from_cart_php, new Response.Listener<String>() {
+    private void addToFavorite() {
+        Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
-                    FavoriteManager.removeFavorite(product);
-                    isFavorite = false;
-                    updateFavoriteStatus();
+                    isFavorited = true;
+                    imgFavorite.setImageResource(R.drawable.favorite_red);
+                    Toast.makeText(ProductDetailActivity.this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ProductDetailActivity.this, response, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailActivity.this, "Thêm vào danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new Response.ErrorListener() {
+        };
+
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ProductDetailActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
-        }) {
-            @Nullable
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php,
+                thanhcong, thatbai) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("user_id", String.valueOf(BottomNavigationActivity.USER.id));
-                params.put("product_id", String.valueOf(product.getId()));
-
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
+                params.put("product_id", String.valueOf(productId));
                 return params;
             }
         };
 
+        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
         requestQueue.add(stringRequest);
     }
 
-    private void updateFavoriteStatus() {
-        if (isFavorite) {
-            // Cập nhật trạng thái yêu thích trên giao diện người dùng
-            imgFavorite.setImageResource(R.drawable.favorite_red);
-
-            // Cập nhật trạng thái yêu thích trên server
-            if (BottomNavigationActivity.USER != null) {
-                addToFavorite();
+    private void deleteFromFavorite() {
+        Response.Listener<String> thanhcong = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    isFavorited = false;
+                    imgFavorite.setImageResource(R.drawable.favorite_white);
+                    Toast.makeText(ProductDetailActivity.this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, "Xóa khỏi danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                }
             }
-        } else {
-            // Cập nhật trạng thái yêu thích trên giao diện người dùng
-            imgFavorite.setImageResource(R.drawable.favorite_white);
+        };
 
-            // Xóa trạng thái yêu thích trên server
-            if (BottomNavigationActivity.USER != null) {
-                removeFromFavorite();
+        Response.ErrorListener thatbai = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ProductDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
-        }
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.delete_from_favorite_php,
+                thanhcong, thatbai) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
+                params.put("product_id", String.valueOf(productId));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ProductDetailActivity.this);
+        requestQueue.add(stringRequest);
     }
 }

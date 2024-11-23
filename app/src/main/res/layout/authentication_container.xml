@@ -5,9 +5,9 @@
     android:id="@+id/layoutAuthenticationContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profile_top_bg"
     android:orientation="vertical"
     android:paddingTop="30dp"
+    android:background="@color/silver"
     tools:context=".Authentication.Authentication_Container">
 
     <ImageView

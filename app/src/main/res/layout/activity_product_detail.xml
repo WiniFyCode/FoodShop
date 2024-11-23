@@ -9,13 +9,13 @@
     tools:context=".Activity.ProductDetailActivity">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:layout_marginTop="2dp"
-        android:gravity="center"
         android:id="@+id/btnBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginTop="2dp"
         android:background="@drawable/back"
         android:backgroundTint="@color/Primary_yellow"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,7 +110,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtQuantity"
-            android:layout_width="35dp"
+            android:layout_width="65dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginStart="7dp"
@@ -140,9 +140,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="7dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/linearLayout2"
@@ -163,7 +164,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end"
-            android:layout_marginStart="170dp"
+            android:layout_marginStart="184dp"
             android:background="@drawable/arrow_bottom_down" />
 
     </LinearLayout>
@@ -206,6 +207,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
             android:layout_weight="5"
             android:text="@string/nutritions"
             android:textSize="18sp"
@@ -243,13 +245,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="8"
+        android:weightSum="10"
         app:layout_constraintStart_toStartOf="@+id/tvDescription"
         app:layout_constraintTop_toBottomOf="@+id/materialDivider3">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_weight="3.5"
             android:text="@string/reviews"
             android:textSize="18sp"
@@ -271,6 +274,7 @@
             android:id="@+id/btnMoreReview"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="0"
             android:background="@drawable/arrow_forward" />
     </LinearLayout>

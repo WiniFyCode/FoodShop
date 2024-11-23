@@ -10,6 +10,10 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,22 +60,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         Product product = productsData.get(position);
 
         holder.tvNameFruit.setText(product.name);
-        holder.tvQuantity.setText(product.weight);
+        holder.tvWeight.setText(product.weight);
 
         String price = product.price;
+        int quantity = product.stock_quantity;
+
+        // Áp dụng animation khi bind item
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.fade);
+        holder.itemView.startAnimation(animation);
 
         if (price != null && !price.isEmpty()) {
             try {
-                // Bỏ dấu phẩy để chuyển đổi giá trị về số nguyên
-                int intPrice = Integer.parseInt(price.replace(",", ""));
-
-                if (intPrice == 0) {
-                    // Nếu giá bằng 0, hiển thị "Tạm hết hàng"
+                if (quantity == 0) {
+                    // Nếu quantity bằng 0, hiển thị "Tạm hết hàng"
                     holder.tvPrice.setText("Tạm hết hàng");
                     holder.tvPrice.setTextColor(context.getResources().getColor(R.color.Red));
                     holder.tvPrice.setPaintFlags(holder.tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
-                    // Nếu giá khác 0, hiển thị giá và thêm ký hiệu "đ" với màu sắc khác nhau
+                    // Nếu quantity khác 0, hiển thị giá và thêm ký hiệu "đ" với màu sắc khác nhau
                     String fullPrice = price + " đ";
 
                     // Sử dụng SpannableString để áp dụng màu cho phần giá và ký hiệu "đ"
@@ -109,6 +115,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 intent.putExtra("image_url", SERVER.food_url + product.image_url);
                 intent.putExtra("product_id", product.id);
                 intent.putExtra("weight", product.weight);
+                intent.putExtra("stock_quantity", product.stock_quantity);
 
                 // chuyển trang
                 context.startActivity(intent);
@@ -129,14 +136,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
 class ProductViewHolder extends RecyclerView.ViewHolder {
     ImageView imgProduct;
-    TextView tvNameFruit, tvQuantity, tvPrice;
+    TextView tvNameFruit, tvWeight, tvPrice;
 
     public ProductViewHolder(View itemView) {
         super(itemView);
         // anh xa
         imgProduct = itemView.findViewById(R.id.imgProduct);
         tvNameFruit = itemView.findViewById(R.id.tvNameFruit);
-        tvQuantity = itemView.findViewById(R.id.tvWeight);
+        tvWeight = itemView.findViewById(R.id.tvWeight);
         tvPrice = itemView.findViewById(R.id.tvPrice);
     }
 }

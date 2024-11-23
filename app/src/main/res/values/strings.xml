@@ -85,5 +85,6 @@
     <string name="body_order_success">Your items has been placed and is on \n it’s way to being processed</string>
     <string name="track_order">Track order</string>
     <string name="enter_your_name">Enter your name</string>
+    <string name="money">$</string>
 
 </resources>

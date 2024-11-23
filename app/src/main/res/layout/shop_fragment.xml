@@ -86,8 +86,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Search what you need..."
-                android:layout_marginStart="-50dp"
+                android:hint="@string/search_what_you_need"
+                android:layout_marginStart="-10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/searchView"
                 app:layout_constraintEnd_toEndOf="@+id/searchView"
                 app:layout_constraintStart_toStartOf="@+id/searchView"

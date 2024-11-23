@@ -159,13 +159,6 @@ public class LoginFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
-    public void saveUserId(int userId) {
-        SharedPreferences preferences = getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("user_id", userId);
-        editor.apply();
-    }
-
     public static int getUserId(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
         return preferences.getInt("user_id", -1); // -1 là giá trị mặc định nếu không tìm thấy
