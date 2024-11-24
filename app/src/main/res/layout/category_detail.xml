@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="15dp">
+    android:layout_margin="15dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="9dp"
         android:gravity="center_horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:layout_gravity="center"
             android:id="@+id/btnBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_gravity="center"
             android:background="@drawable/back"
             android:backgroundTint="@color/Primary_yellow" />
 
         <TextView
-            android:layout_weight="8"
             android:id="@+id/tvTitleCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="8"
             android:ellipsize="end"
             android:gravity="center|top"
             android:maxLines="2"
             android:text="@string/find_products"
             android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSort"
@@ -41,11 +41,22 @@
 
     </LinearLayout>
 
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/search_bg"
+        app:defaultQueryHint="@string/search_what_you_need"
+        app:searchHintIcon="@drawable/search"
+        app:searchIcon="@drawable/search" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvDetailCategory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="57dp"/>
+        android:layout_marginBottom="57dp" />
 
 </LinearLayout>

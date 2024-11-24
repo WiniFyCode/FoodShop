@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Food Shop</string>
+    <string name="app_name">Thanh Shop</string>
     <string name="shop">Cửa hàng</string>
     <string name="explore">Khám phá</string>
     <string name="cart">Giỏ hàng</string>

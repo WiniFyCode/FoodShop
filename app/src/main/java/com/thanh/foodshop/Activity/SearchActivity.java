@@ -23,6 +23,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.thanh.foodshop.Adapter.ProductAdapter;
+import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -63,6 +64,12 @@ public class SearchActivity extends AppCompatActivity {
 
         loadProduct();
 
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.setIconified(false);
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -71,13 +78,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filteredList.clear();
-                for (Product product : productList) {
-                    if (product.getName().toLowerCase().contains(newText.toLowerCase())) {
-                        filteredList.add(product);
-                    }
-                }
-                productAdapter.notifyDataSetChanged();
+                filterCategories(newText);
                 return true;
             }
         });
@@ -191,6 +192,26 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    private void filterCategories(String query) {
+        query = query.toLowerCase();
+        if (query.isEmpty()) {
+            productAdapter.setProducts(productList);
+        } else {
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            // Bo di cac ky tu dac biet
+            String chuoiKoDau = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+            // Normalizer.NFD là một phương thức trong Java để chuyển chuỗi văn bản sang dạng Unicode Normalization Form D (NFD)
+            for (Product product : productList) {
+                String productName = product.getName().toLowerCase();
+                String productKoDau = Normalizer.normalize(productName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+                if (productKoDau.contains(chuoiKoDau)) {
+                    filteredProducts.add(product);
+                }
+            }
+            productAdapter.setProducts(filteredProducts);
+        }
+        productAdapter.notifyDataSetChanged();
+    }
 
     public void loadProduct() {
         Response.Listener<String> thanhcong = new Response.Listener<String>() {

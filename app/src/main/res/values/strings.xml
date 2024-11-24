@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Food Shop</string>
+    <string name="app_name" translatable="false">Thanh Shop</string>
 
     <!--  Menu  -->
     <string name="shop">Shop</string>

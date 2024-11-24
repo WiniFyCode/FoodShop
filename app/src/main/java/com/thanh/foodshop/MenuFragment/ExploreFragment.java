@@ -64,6 +64,12 @@ public class ExploreFragment extends Fragment {
         rcvExplore.setAdapter(categoryAdapter);
 
         searchView = view.findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.setIconified(false);
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

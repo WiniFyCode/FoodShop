@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.thanh.foodshop.Adapter.ProductAdapter;
+import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -34,6 +36,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.text.Collator;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -48,6 +51,7 @@ public class CategoryDetail extends Fragment {
 
     TextView tvTitleCategory;
     AppCompatButton btnBack, btnSort;
+    SearchView searchView;
 
     @Nullable
     @Override
@@ -74,6 +78,26 @@ public class CategoryDetail extends Fragment {
             @Override
             public void onClick(View v) {
                 showSortOptions();
+            }
+        });
+
+        searchView = view.findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterCategories(newText);
+                return true;
             }
         });
 
@@ -140,7 +164,7 @@ public class CategoryDetail extends Fragment {
         builder.show();
     }
 
-    // Sort product list by ascending price
+    // Sắp xếp danh sách sản phẩm theo giá tăng dần
     private void sortByPriceAscending() {
         productsData.sort(new Comparator<Product>() {
             @Override
@@ -152,7 +176,7 @@ public class CategoryDetail extends Fragment {
         });
     }
 
-    // Sort product list by descending price
+    // Sắp xếp danh sách sản phẩm theo giá giảm dần
     private void sortByPriceDescending() {
         productsData.sort(new Comparator<Product>() {
             @Override
@@ -164,7 +188,7 @@ public class CategoryDetail extends Fragment {
         });
     }
 
-    // Sort product list by ascending name
+    // Sắp xếp danh sách sản phẩm theo tên tăng dần
     private void sortByNameAscending() {
         Collator collator = Collator.getInstance(Locale.forLanguageTag("vi_VN"));
         productsData.sort(new Comparator<Product>() {
@@ -175,7 +199,7 @@ public class CategoryDetail extends Fragment {
         });
     }
 
-    // Sort product list by descending name
+    // Sắp xếp danh sách sản phẩm theo tên giảm dần
     private void sortByNameDescending() {
         Collator collator = Collator.getInstance(Locale.forLanguageTag("vi_VN"));
         productsData.sort(new Comparator<Product>() {
@@ -184,6 +208,27 @@ public class CategoryDetail extends Fragment {
                 return collator.compare(p2.getName(), p1.getName());
             }
         });
+    }
+
+    private void filterCategories(String query) {
+        query = query.toLowerCase();
+        if (query.isEmpty()) {
+            productAdapter.setProducts(productsData);
+        } else {
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            // Bo di cac ky tu dac biet
+            String chuoiKoDau = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+            // Normalizer.NFD là một phương thức trong Java để chuyển chuỗi văn bản sang dạng Unicode Normalization Form D (NFD)
+            for (Product product : productsData) {
+                String productName = product.getName().toLowerCase();
+                String productKoDau = Normalizer.normalize(productName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+                if (productKoDau.contains(chuoiKoDau)) {
+                    filteredProducts.add(product);
+                }
+            }
+            productAdapter.setProducts(filteredProducts);
+        }
+        productAdapter.notifyDataSetChanged();
     }
 
     private void loadProducts() {

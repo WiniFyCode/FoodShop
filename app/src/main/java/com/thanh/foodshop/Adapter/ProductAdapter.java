@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Activity.ProductDetailActivity;
 import com.thanh.foodshop.MenuFragment.ShopFragment;
+import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
@@ -38,6 +39,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     public ProductAdapter(ArrayList<Product> productsData, Context context) {
         this.productsData = productsData;
         this.context = context;
+    }
+
+    // Phương thức để cập nhật dữ liệu cho adapter o CategoryDetail
+    public void setProducts(ArrayList<Product> products) {
+        this.productsData = products;
     }
 
     // Phương thức để cập nhật dữ liệu o SHOP FRAGMENT ( SEARCH )
