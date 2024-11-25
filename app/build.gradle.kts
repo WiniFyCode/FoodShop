@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.lottie)
     implementation(libs.shimmer)
+    implementation(libs.imageslideshow)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

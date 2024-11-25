@@ -13,6 +13,7 @@ public class SERVER {
 
 //    IMAGE
     public static String layanhslide_php = ip + "slide/layslide.php";
+    public static String get_images_php = ip + "image/get_images.php";
     public static String food_url = ip + "image/";
     public static String anhslide_url = ip + "slide/";
 

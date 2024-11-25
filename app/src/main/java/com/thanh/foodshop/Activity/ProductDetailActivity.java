@@ -1,7 +1,5 @@
 package com.thanh.foodshop.Activity;
 
-import static android.app.PendingIntent.getActivity;
-
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -29,26 +27,33 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.denzcoskun.imageslider.ImageSlider;
 import com.google.android.material.textfield.TextInputEditText;
-import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Authentication.LoginFragment;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     AppCompatButton btnBack, btnMinus, btnPlus, btnMoreDes, btnAddToCart, btnMoreNut, btnMoreReview;
-    ImageView imgProduct, imgFavorite;
+    ImageView imgFavorite;
     TextView tvNameProduct, tvWeight, tvPrice, tvDescription, tvNutritions;
     TextInputEditText edtQuantity;
     AppCompatRatingBar ratingBar;
+    ImageSlider imgProduct;
 
     int quantity = 1; // đặt số lượng mặc định khi người dùng ấn add to cart
     int productId = -1;
@@ -97,6 +102,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Xóa background mặc định
         imgProduct.setBackground(null);
 
+        // Load anh image slider
+        loadImagesFromServer();
+
         // Thiết lập dữ liệu
         tvNameProduct.setText(name);
         setupPrice(price, stock_quantity);
@@ -106,7 +114,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         } else {
             tvWeight.setText(weight);
         }
-        loadImage(image);
 
         // Lấy đối tượng Product từ intent
         //Intent có thể chứa các tham số là các đối tượng Serializable
@@ -218,7 +225,45 @@ public class ProductDetailActivity extends AppCompatActivity {
                 addToCart();
             }
         });
+    }
 
+    private void loadImagesFromServer() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.get_images_php, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.has("status") && jsonObject.getString("status").equals("error")) {
+                        Log.e("Error", jsonObject.getString("message"));
+                    } else {
+                        JSONArray images = jsonObject.getJSONArray("images");
+                        List<SlideModel> slideModels = new ArrayList<>();
+                        for (int i = 0; i < images.length(); i++) {
+                            String imageUrl = SERVER.food_url + images.getString(i);
+                            slideModels.add(new SlideModel(imageUrl,ScaleTypes.CENTER_INSIDE));
+                        }
+                        imgProduct.setImageList(slideModels);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Error", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("product_id", String.valueOf(productId));
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void addToCart() {
@@ -245,9 +290,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Log.d("ADD_TO_CART", "User ID: " + LoginFragment.getUserId(ProductDetailActivity.this));
-                Log.d("ADD_TO_CART", "Product ID: " + productId);
-                Log.d("ADD_TO_CART", "Quantity: " + quantity);
                 // gửi dữ liệu lên server
                 HashMap<String, String> params = new HashMap<>();
                 params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
@@ -277,15 +319,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             tvPrice.setText(spannable);
             btnAddToCart.setEnabled(true);
             btnAddToCart.setAlpha(1f);
-        }
-    }
-
-    private void loadImage(String image) {
-        // Sử dụng Picasso để load hình ảnh từ url
-        if (image != null && !image.isEmpty()) {
-            Picasso.get().load(image).into(imgProduct);
-        } else {
-            imgProduct.setImageResource(R.drawable.eye_icon);
         }
     }
 

@@ -144,7 +144,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         });
 
         // Load hình ảnh từ server bằng Picasso
-        Picasso.get().load(SERVER.food_url + product.image_url).into(holder.imgProduct);
+        String[] imageUrls = product.image_url.split("/");
+        if (imageUrls.length > 0) {
+            Picasso.get().load(SERVER.food_url + imageUrls[0]).into(holder.imgProduct);
+        } else {
+            Picasso.get().load(SERVER.food_url + product.image_url).into(holder.imgProduct);
+        }
 
         // Add to cart
         holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
