@@ -29,13 +29,14 @@ public class Product implements Serializable {
         this.category_id = category_id;
     }
 
-    public Product (int id, String name, String description, String price, String weight, String image_url, boolean isFavorited) {
+    public Product (int id, String name, String description, String price, String weight, String image_url,int stock_quantity, boolean isFavorited) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.weight = weight;
         this.image_url = image_url;
+        this.stock_quantity = stock_quantity;
         this.isFavorited = isFavorited;
     }
 

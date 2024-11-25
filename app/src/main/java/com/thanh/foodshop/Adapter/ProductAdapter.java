@@ -2,11 +2,14 @@ package com.thanh.foodshop.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +19,19 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Activity.ProductDetailActivity;
 import com.thanh.foodshop.MenuFragment.ShopFragment;
@@ -29,8 +40,12 @@ import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     Context context;
@@ -130,6 +145,54 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
         // Load hình ảnh từ server bằng Picasso
         Picasso.get().load(SERVER.food_url + product.image_url).into(holder.imgProduct);
+
+        // Add to cart
+        holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+                int userId = sharedPreferences.getInt("user_id", 0);
+                int productId = product.getId();
+                int quantity = 1;
+                addToCart(userId, productId, quantity, product.name);
+                Log.d("ProductAdapter", "UserId: " + userId + ", ProductId: " + productId + ", Quantity: " + quantity);
+            }
+        });
+    }
+
+    private void addToCart(int userId, int productId, int quantity, String name) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_cart_php,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.equals("success")) {
+                            Toast.makeText(context, "Đã thêm " + name + " vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                        } else if (response.equals("fail")) {
+                            Toast.makeText(context, "Thêm hàng hóa thất bại", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Thêm hàng hóa thất bại do lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                params.put("product_id", String.valueOf(productId));
+                params.put("quantity", String.valueOf(quantity));
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
 
@@ -143,6 +206,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 class ProductViewHolder extends RecyclerView.ViewHolder {
     ImageView imgProduct;
     TextView tvNameFruit, tvWeight, tvPrice;
+    AppCompatButton btnAddToCart;
 
     public ProductViewHolder(View itemView) {
         super(itemView);
@@ -151,5 +215,6 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
         tvNameFruit = itemView.findViewById(R.id.tvNameFruit);
         tvWeight = itemView.findViewById(R.id.tvWeight);
         tvPrice = itemView.findViewById(R.id.tvPrice);
+        btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
     }
 }

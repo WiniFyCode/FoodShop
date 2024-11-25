@@ -36,6 +36,9 @@ import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,9 +52,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     int quantity = 1; // đặt số lượng mặc định khi người dùng ấn add to cart
     int productId = -1;
-    private Product product;
+    public Product product;
 
-    boolean isFavorited = false;
+    boolean isFavorited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +83,16 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnAddToCart = findViewById(R.id.btnAddToCart);
 
         // Lấy dữ liệu từ intent
+        productId = intent.getIntExtra("product_id", 0);
         String name = intent.getStringExtra("name");
         String description = intent.getStringExtra("description");
         String price = intent.getStringExtra("price");
         String weight = intent.getStringExtra("weight");
         String image = intent.getStringExtra("image_url");
         int stock_quantity = intent.getIntExtra("stock_quantity", 0);
-        productId = intent.getIntExtra("product_id", 0);
-        Log.e("ProdID", productId + " dhhsdhds");
+        isFavorited = intent.getBooleanExtra("favorite", false);
+
+        Log.e("ProdID", productId + "");
 
         // Xóa background mặc định
         imgProduct.setBackground(null);
@@ -111,6 +116,18 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Kiểm tra xem sản phẩm có trong danh sách yêu thích không
         checkIfFavorited();
+
+        // thiet lap gia tri cho button Favorite
+        imgFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavorited) {
+                    deleteFromFavorite();
+                } else {
+                    addToFavorite();
+                }
+            }
+        });
 
         // back lại
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -202,16 +219,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        imgFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFavorited) {
-                    deleteFromFavorite();
-                } else {
-                    addToFavorite();
-                }
-            }
-        });
     }
 
     private void addToCart() {
@@ -289,9 +296,12 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if (response.equals("favorited")) {
                     isFavorited = true;
                     imgFavorite.setImageResource(R.drawable.favorite_red);
-                } else {
+                } else if (response.equals("not_favorited")) {
                     isFavorited = false;
                     imgFavorite.setImageResource(R.drawable.favorite_white);
+                } else {
+                    Toast.makeText(ProductDetailActivity.this,
+                            "Lỗi: " + response, Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -299,16 +309,20 @@ public class ProductDetailActivity extends AppCompatActivity {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ProductDetailActivity.this, "Kết nối thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this,
+                        "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
         };
 
+        // Tạo và gửi request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.check_favorite_php, thanhcong, thatbai) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
                 params.put("product_id", String.valueOf(productId));
+                Log.d("ProductDetail", "Checking favorite - user_id: " + params.get("user_id") +
+                        ", product_id: " + params.get("product_id"));
                 return params;
             }
         };
@@ -317,16 +331,28 @@ public class ProductDetailActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+
     private void addToFavorite() {
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("success")) {
-                    isFavorited = true;
-                    imgFavorite.setImageResource(R.drawable.favorite_red);
-                    Toast.makeText(ProductDetailActivity.this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ProductDetailActivity.this, "Thêm vào danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    if (jsonResponse.getString("status").equals("success")) {
+                        isFavorited = true;
+                        imgFavorite.setImageResource(R.drawable.favorite_red);
+                        Toast.makeText(ProductDetailActivity.this,
+                                "Đã thêm vào danh sách yêu thích",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this,
+                                "Lỗi: " + jsonResponse.getString("message"),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(ProductDetailActivity.this,
+                            "Lỗi xử lý dữ liệu",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -334,16 +360,19 @@ public class ProductDetailActivity extends AppCompatActivity {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ProductDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this,
+                        "Lỗi kết nối",
+                        Toast.LENGTH_SHORT).show();
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php,
-                thanhcong, thatbai) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.add_to_favorite_php, thanhcong, thatbai
+        ) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
+                params.put("user_id",
+                        String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
                 params.put("product_id", String.valueOf(productId));
                 return params;
             }
@@ -357,12 +386,23 @@ public class ProductDetailActivity extends AppCompatActivity {
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("success")) {
-                    isFavorited = false;
-                    imgFavorite.setImageResource(R.drawable.favorite_white);
-                    Toast.makeText(ProductDetailActivity.this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ProductDetailActivity.this, "Xóa khỏi danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    if (jsonResponse.getString("status").equals("success")) {
+                        isFavorited = false;
+                        imgFavorite.setImageResource(R.drawable.favorite_white);
+                        Toast.makeText(ProductDetailActivity.this,
+                                "Đã xóa khỏi danh sách yêu thích",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this,
+                                "Lỗi: " + jsonResponse.getString("message"),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(ProductDetailActivity.this,
+                            "Lỗi xử lý dữ liệu",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -370,16 +410,19 @@ public class ProductDetailActivity extends AppCompatActivity {
         Response.ErrorListener thatbai = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ProductDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this,
+                        "Lỗi kết nối",
+                        Toast.LENGTH_SHORT).show();
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.delete_from_favorite_php,
-                thanhcong, thatbai) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER.delete_from_favorite_php, thanhcong, thatbai
+        ) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("user_id", String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
+                params.put("user_id",
+                        String.valueOf(LoginFragment.getUserId(ProductDetailActivity.this)));
                 params.put("product_id", String.valueOf(productId));
                 return params;
             }
