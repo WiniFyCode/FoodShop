@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class LoginFragment extends Fragment {
     AppCompatCheckBox cbRememberMe;
     AppCompatButton btnLogin, btnLoginGoogle, btnLoginFacebook;
     SharedPreferences sharedPreferences;
+    TextView tvForgotPassword;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class LoginFragment extends Fragment {
         btnLogin = view.findViewById(R.id.btnLogin);
         btnLoginGoogle = view.findViewById(R.id.btnLoginGoogle);
         btnLoginFacebook = view.findViewById(R.id.btnLoginFacebook);
+        tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
 
         // Kiểm tra xem có thông tin đăng nhập đã lưu không để tự động đăng nhập
         if (sharedPreferences.getBoolean("remember_me", false)) {
@@ -64,9 +67,9 @@ public class LoginFragment extends Fragment {
 
             if (!username.isEmpty() && !password.isEmpty()) {
                 // Đăng nhập tự động
-                Intent intent = new Intent(requireActivity(), BottomNavigationActivity.class);
-                requireActivity().startActivity(intent);
-                requireActivity().finish();
+                ipedtUsername.setText(username);
+                ipedtPassword.setText(password);
+                cbRememberMe.setChecked(true);
             }
         }
 
@@ -78,11 +81,20 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        // Xử lý khi người dùng nhấn vào nút quên mật khẩu
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(requireActivity(), ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 
     // Hàm xử lý đăng nhập
-    void login() {
+    private void login() {
         String username = ipedtUsername.getText().toString().trim();
         String password = ipedtPassword.getText().toString().trim();
 

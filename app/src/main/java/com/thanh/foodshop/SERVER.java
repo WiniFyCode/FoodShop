@@ -21,6 +21,7 @@ public class SERVER {
     public static String login_php = ip + "authentication/login.php";
     public static String register_php = ip + "authentication/register.php";
     public static String update_user_info_php = ip + "authentication/update_user_info.php";
+    public static String change_password_php = ip + "authentication/change_password.php";
 
 //    CART
     public static String get_cart_php = ip + "cart/get_cart.php";
