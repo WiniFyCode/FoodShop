@@ -61,15 +61,19 @@ public class LoginFragment extends Fragment {
         tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
 
         // Kiểm tra xem có thông tin đăng nhập đã lưu không để tự động đăng nhập
-        if (sharedPreferences.getBoolean("remember_me", false)) {
-            String username = sharedPreferences.getString("username", "");
-            String password = sharedPreferences.getString("password", "");
+        SharedPreferences preferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        String username = preferences.getString("username", null);
+        String password = preferences.getString("password", null);
+        boolean rememberMe = preferences.getBoolean("remember_me", false);
 
-            if (!username.isEmpty() && !password.isEmpty()) {
-                // Đăng nhập tự động
-                ipedtUsername.setText(username);
-                ipedtPassword.setText(password);
-                cbRememberMe.setChecked(true);
+        if (username != null && password != null) {
+            ipedtUsername.setText(username);
+            ipedtPassword.setText(password);
+            cbRememberMe.setChecked(rememberMe);
+
+            // Nếu remember_me = true, tự động đăng nhập
+            if (rememberMe) {
+                login(); // Gọi phương thức login() để tự động đăng nhập
             }
         }
 

@@ -88,6 +88,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                         // Chuyển sang giao diện đăng nhập
                         Intent intent = new Intent(ForgotPasswordActivity.this, Authentication_Container.class);
+                        intent.putExtra("username", phoneNumber);
+                        intent.putExtra("password", newPassword);
+                        intent.putExtra("remember_me", true);
                         startActivity(intent);
                         finish();
                     } else if (response.equals("SDT khong ton tai")) {
