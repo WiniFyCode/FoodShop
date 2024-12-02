@@ -59,9 +59,6 @@ public class CartFragment extends Fragment {
     int user_id;
 
     double totalPrice = 0;
-    double subtotal = 0;
-    double delivery = 0;
-    double tax = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

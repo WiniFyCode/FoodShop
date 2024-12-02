@@ -1,13 +1,17 @@
 package com.thanh.foodshop.Authentication;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +21,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.Fragment;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,11 +43,15 @@ import java.util.Map;
 
 public class LoginFragment extends Fragment {
 
+    RelativeLayout btnLogin;
     TextInputEditText ipedtUsername, ipedtPassword;
     AppCompatCheckBox cbRememberMe;
-    AppCompatButton btnLogin, btnLoginGoogle, btnLoginFacebook;
+    AppCompatButton btnLoginGoogle, btnLoginFacebook;
     SharedPreferences sharedPreferences;
-    TextView tvForgotPassword;
+    TextView tvForgotPassword, tvLogin;
+    LottieAnimationView loginAnimation;
+
+    public static final int TIMER_LOGIN = 2000;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,9 +65,12 @@ public class LoginFragment extends Fragment {
         ipedtPassword = view.findViewById(R.id.ipedtPassword);
         cbRememberMe = view.findViewById(R.id.cbRememberMe);
         btnLogin = view.findViewById(R.id.btnLogin);
+        tvLogin = view.findViewById(R.id.tvLogin);
         btnLoginGoogle = view.findViewById(R.id.btnLoginGoogle);
         btnLoginFacebook = view.findViewById(R.id.btnLoginFacebook);
         tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
+
+        loginAnimation = view.findViewById(R.id.loginAnimation);
 
         // Kiểm tra xem có thông tin đăng nhập đã lưu không để tự động đăng nhập
         SharedPreferences preferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
@@ -80,7 +92,31 @@ public class LoginFragment extends Fragment {
         // Xử lý khi người dùng nhấn vào nút đăng nhập
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                // hien thi lottie loading
+                loginAnimation.setVisibility(View.VISIBLE);
+                loginAnimation.playAnimation();
+                // an text view
+                tvLogin.setVisibility(View.GONE);
+                // handle
+                new Handler().postDelayed(this::resetButton, TIMER_LOGIN);
+            }
+
+            private void resetButton() {
+                // an lottie loading
+                loginAnimation.cancelAnimation();
+                loginAnimation.setVisibility(View.GONE);
+                // hien thi text view
+                tvLogin.setVisibility(View.VISIBLE);
+                // start login
+//                login();
+            }
+        });
+
+        // Xử lý khi animation kết thúc
+        loginAnimation.addAnimatorListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
                 login();
             }
         });

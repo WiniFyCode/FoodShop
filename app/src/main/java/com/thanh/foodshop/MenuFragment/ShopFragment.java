@@ -70,7 +70,8 @@ public class ShopFragment extends Fragment {
     // search view
     ImageView searchView;
 
-    AppCompatButton btnAddToCart;
+    // Notifications
+    AppCompatButton btnNotifications;
 
     @Nullable
     @Override
@@ -107,6 +108,9 @@ public class ShopFragment extends Fragment {
 
         rcvBestSelling.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         rcvBestSelling.setAdapter(bestSellingAdapter);
+
+        // Notifications
+        btnNotifications = view.findViewById(R.id.btnNotifications);
 
         // Lay ten user
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);

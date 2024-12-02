@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,17 +31,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.thanh.foodshop.Activity.ProductDetailActivity;
-import com.thanh.foodshop.MenuFragment.ShopFragment;
-import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {

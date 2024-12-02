@@ -81,20 +81,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvForgotPassword" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <RelativeLayout
         android:id="@+id/btnLogin"
         android:layout_width="354dp"
         android:layout_height="57dp"
         android:layout_marginTop="59dp"
-        android:background="@drawable/button_bg"
-        android:elevation="8dp"
-        android:text="@string/login"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        android:clickable="true"
+        android:background="@color/Primary_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" >
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:text="@string/login"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loginAnimation"
+            app:lottie_speed="4.75"
+            app:lottie_rawRes="@raw/loading_login"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="true"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView2"

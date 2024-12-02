@@ -1,7 +1,5 @@
 package com.thanh.foodshop.Activity;
 
-import static java.security.AccessController.getContext;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +13,12 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.thanh.foodshop.Adapter.ProductAdapter;
-import com.thanh.foodshop.Model.Categories;
 import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;

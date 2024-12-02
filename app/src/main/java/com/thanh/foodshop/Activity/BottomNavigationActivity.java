@@ -1,16 +1,7 @@
 package com.thanh.foodshop.Activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -66,7 +57,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
         LoadFragment(shopFragment);
 
-// Cập nhật badge khi ứng dụng khởi động
+        // Cập nhật badge khi ứng dụng khởi động
         updateCartBadge(CART.size());
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
