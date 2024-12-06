@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.lottie)
     implementation(libs.shimmer)
     implementation(libs.imageslideshow)
+    implementation(libs.facebook.android.sdk)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

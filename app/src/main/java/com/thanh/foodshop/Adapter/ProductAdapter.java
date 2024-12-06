@@ -79,8 +79,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         int quantity = product.stock_quantity;
 
         // Áp dụng animation khi bind item
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.fade);
-        holder.itemView.startAnimation(animation);
+//        Animation animation = AnimationUtils.loadAnimation(context, R.anim.fade);
+//        holder.itemView.startAnimation(animation);
 
         if (price != null && !price.isEmpty()) {
             try {

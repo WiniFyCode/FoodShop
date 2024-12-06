@@ -14,9 +14,10 @@ navigationFragment = "2.8.4"
 navigationUi = "2.8.4"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.0.0"
-lottie = "6.6.0"
+lottie = "6.6.1"
 shimmer = "0.5.0"
 imageslideshow = "0.1.2"
+facebookAndroidSdk = "17.0.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -36,6 +37,7 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "shimmer" }
 imageslideshow = { group = "com.github.denzcoskun", name = "ImageSlideshow", version.ref = "imageslideshow" }
+facebook-android-sdk = { group = "com.facebook.android", name = "facebook-android-sdk", version.ref = "facebookAndroidSdk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

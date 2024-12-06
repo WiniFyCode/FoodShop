@@ -16,6 +16,7 @@
         android:theme="@style/Theme.FoodShop"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".Authentication.ForgotPasswordActivity"
             android:exported="false" />

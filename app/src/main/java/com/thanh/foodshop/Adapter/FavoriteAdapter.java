@@ -27,6 +27,9 @@ import com.thanh.foodshop.Model.Product;
 import com.thanh.foodshop.R;
 import com.thanh.foodshop.SERVER;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +61,16 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteViewHolder> {
 
         holder.btnDetail.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("product", product);
             intent.putExtra("name", product.name);
             intent.putExtra("price", product.price);
             intent.putExtra("description", product.description);
             intent.putExtra("image_url", SERVER.food_url + product.image_url);
             intent.putExtra("product_id", product.id);
             intent.putExtra("weight", product.weight);
+            intent.putExtra("stock_quantity", product.stock_quantity);
+            intent.putExtra("favorite", product.isFavorited);
+            Log.d("FavoriteAdapter", "Favorite: " + product.isFavorited);
             context.startActivity(intent);
         });
     }
@@ -85,14 +92,19 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteViewHolder> {
         Response.Listener<String> thanhcong = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("success")) {
-                    Toast.makeText(context, "Xóa khỏi danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, favoriteProducts.size());
-                } else if (response.equals("not found")) {
-                    Toast.makeText(context, "Sản phẩm không có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Xóa thất bại: " + response, Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("status").equals("success")) {
+                        Toast.makeText(context, "Xóa khỏi danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
+                        favoriteProducts.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, favoriteProducts.size());
+                    } else if (jsonObject.getString("status").equals("error")) {
+                        Toast.makeText(context, "Lỗi: " + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("FavoriteAdapter", "JSONException: " + e.getMessage());
                 }
             }
         };

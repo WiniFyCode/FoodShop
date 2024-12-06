@@ -233,19 +233,14 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.has("status") && jsonObject.getString("status").equals("error")) {
-                        Log.e("Error", jsonObject.getString("message"));
-                    } else {
-                        JSONArray images = jsonObject.getJSONArray("images");
-                        List<SlideModel> slideModels = new ArrayList<>();
-                        for (int i = 0; i < images.length(); i++) {
-                            String imageUrl = SERVER.food_url + images.getString(i);
-                            slideModels.add(new SlideModel(imageUrl,ScaleTypes.CENTER_INSIDE));
-                        }
-                        imgProduct.setImageList(slideModels);
+                    String[] images = response.split("/");
+                    List<SlideModel> slideModels = new ArrayList<>();
+                    for (String image : images) {
+                        String imageUrl = SERVER.food_url + image;
+                        slideModels.add(new SlideModel(imageUrl,ScaleTypes.CENTER_INSIDE));
                     }
-                } catch (JSONException e) {
+                    imgProduct.setImageList(slideModels);
+                } catch (Exception e) {
                     Log.e("Error", e.toString());
                 }
             }
@@ -258,7 +253,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("product_id", String.valueOf(productId));
+                params.put("id", String.valueOf(productId));
                 return params;
             }
         };

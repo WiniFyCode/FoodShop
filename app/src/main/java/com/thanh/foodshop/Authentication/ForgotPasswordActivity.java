@@ -96,6 +96,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     } else if (response.equals("SDT khong ton tai")) {
                         Toast.makeText(ForgotPasswordActivity.this, "Số điện thoại không tồn tại", Toast.LENGTH_SHORT).show();
                     } else {
+                        // Lỗi kết nối
                         Toast.makeText(ForgotPasswordActivity.this, "Lỗi khi thay đổi mật khẩu", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {

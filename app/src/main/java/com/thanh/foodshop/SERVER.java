@@ -2,7 +2,7 @@ package com.thanh.foodshop;
 
 public class SERVER {
 
-    public static String ip = "http://192.168.0.102/foodshop/";
+    public static String ip = "http://192.168.0.116/foodshop/";
 
 //    PRODUCT
     public static String bestfood_php = ip + "product/bestselling.php";

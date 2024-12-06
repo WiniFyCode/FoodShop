@@ -84,8 +84,9 @@ public class FavoriteFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 if (position >= 0 && position < favoriteProducts.size()) {
+                    Product product = favoriteProducts.get(position);
                     favoriteAdapter.removeItem(position);
-                    favoriteAdapter.deleteFromFavorite(favoriteProducts.get(position).id, position);
+                    favoriteAdapter.deleteFromFavorite(product.id, position);
                 }
             }
         });
@@ -101,21 +102,27 @@ public class FavoriteFragment extends Fragment {
             public void onResponse(String response) {
                 Log.d("FavoriteFragment", "Server Response: " + response);
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Product product = new Product(
-                                jsonObject.getInt("id"),
-                                jsonObject.getString("name"),
-                                jsonObject.getString("description"),
-                                jsonObject.getString("price"),
-                                jsonObject.getString("weight"),
-                                jsonObject.getString("image_url"),
-                                true
-                        );
-                        favoriteProducts.add(product);
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("status").equals("success")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject row = jsonArray.getJSONObject(i);
+                            Product product = new Product(
+                                    row.getInt("id"),
+                                    row.getString("name"),
+                                    row.getString("description"),
+                                    row.getString("price"),
+                                    row.getString("weight"),
+                                    row.getString("image_url"),
+                                    row.getInt("stock_quantity"),
+                                    true
+                            );
+                            favoriteProducts.add(product);
+                        }
+                        favoriteAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.e("FavoriteFragment", "Lỗi: " + jsonObject.getString("message"));
                     }
-                    favoriteAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     Log.e("FavoriteFragment", "Lỗi: " + e.getMessage());
                 }

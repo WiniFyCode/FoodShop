@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name" translatable="false">Thanh Shop</string>
 
+    <!--  Facebook  -->
+    <string name="facebook_app_id" translatable="false">458169020720932</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1234</string>
+    <string name="facebook_client_token" translatable="false">56789</string>
+
     <!--  Menu  -->
     <string name="shop">Shop</string>
     <string name="explore">Explore</string>

@@ -38,6 +38,7 @@ import com.thanh.foodshop.SERVER;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,7 @@ public class LoginFragment extends Fragment {
     SharedPreferences sharedPreferences;
     TextView tvForgotPassword, tvLogin;
     LottieAnimationView loginAnimation;
+
 
     public static final int TIMER_LOGIN = 2000;
 
@@ -129,6 +131,9 @@ public class LoginFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+        // Login Facebook
 
         return view;
     }
